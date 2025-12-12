@@ -1,0 +1,12 @@
+# Eval split - Standard evaluation benchmark
+name: eval
+description: Standard evaluation benchmark for model comparison
+version: "1.0.0"
+
+include:
+  - question_set: shopping/v1_basic
+  - question_set: heart/v1_basic
+
+settings:
+  # No sampling - use all questions
+  shuffle: false

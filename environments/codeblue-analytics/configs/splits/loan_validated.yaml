@@ -1,0 +1,10 @@
+# Loan Validated split - Verified Q&A
+name: loan_validated
+description: Validated Q&A pairs where gold_code produces expected output
+version: "1.0.0"
+
+include:
+  - question_set: loan/v1_validated
+
+settings:
+  max_questions: 22

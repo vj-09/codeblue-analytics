@@ -1,0 +1,9 @@
+name: bank_eval
+description: Bank marketing Q&A evaluation - 18 validated questions
+version: "1.0.0"
+
+include:
+  - question_set: bank/v1_validated
+
+settings:
+  max_questions: 18

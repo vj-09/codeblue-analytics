@@ -1,0 +1,11 @@
+# Dev split - Quick local testing
+name: dev
+description: Minimal subset for development and debugging
+version: "1.0.0"
+
+include:
+  - question_set: shopping/v1_basic
+    sample: 3  # Only use 3 questions for quick testing
+
+settings:
+  max_questions: 5

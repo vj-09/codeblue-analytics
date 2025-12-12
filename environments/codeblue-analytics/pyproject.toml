@@ -1,0 +1,20 @@
+[project]
+name = "codeblue-analytics"
+description = "CodeBlue: Dataanalytics - RLVR environment for Pandas code generation"
+tags = ["pandas", "data-analysis", "code-generation", "single-turn", "train", "eval"]
+version = "0.1.5"
+requires-python = ">=3.10"
+dependencies = [
+    "verifiers>=0.1.8",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+    "datasets>=2.14.0",
+    "tabulate>=0.9.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+include = ["codeblue_analytics.py", "pyproject.toml", "data/*", "data/**/*", "configs/*", "configs/**/*"]

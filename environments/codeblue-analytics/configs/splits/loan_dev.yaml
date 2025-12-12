@@ -1,0 +1,11 @@
+# Loan Dev split - Testing mined Q&A
+name: loan_dev
+description: Dev split for loan mined questions (10 samples)
+version: "1.0.0"
+
+include:
+  - question_set: loan/v1_mined
+    sample: 10
+
+settings:
+  max_questions: 10

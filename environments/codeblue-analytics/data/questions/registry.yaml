@@ -1,0 +1,147 @@
+# Question Sets Registry
+# Defines all available question sets for evaluation
+
+question_sets:
+  # Shopping dataset questions
+  shopping/v1_basic:
+    dataset: shopping
+    file: shopping/v1_basic.jsonl
+    version: "2024-12-11"
+    description: Basic data quality and value counts questions
+    difficulty: easy
+    count: 6
+    skills:
+      - duplicated
+      - isnull
+      - value_counts
+      - sum
+    source:
+      notebook: shopping-analysis.ipynb
+      extractor: extract_qa_v2.py
+
+  # Heart dataset questions
+  heart/v1_basic:
+    dataset: heart
+    file: heart/v1_basic.jsonl
+    version: "2024-12-10"
+    description: Basic groupby and rate calculations
+    difficulty: easy
+    count: 4
+    skills:
+      - groupby
+      - mean
+      - value_counts
+    source:
+      notebook: heart_failure_eda.ipynb
+      extractor: manual
+
+  # Loan dataset questions (mined from Kaggle notebooks)
+  loan/v1_mined:
+    dataset: loan
+    file: loan/v1_mined.jsonl
+    version: "2024-12-12"
+    description: Mined Q&A from loan notebook with business insight grading
+    difficulty: mixed
+    count: 40
+    skills:
+      - groupby
+      - mean
+      - value_counts
+      - filtering
+      - aggregation
+    source:
+      notebook: loan_notebook.ipynb
+      extractor: kaggle-qa-miner pipeline (step1-3)
+
+  loan/v1_validated:
+    dataset: loan
+    file: loan/v1_validated.jsonl
+    version: "2024-12-12"
+    description: Validated Q&A - gold_code executes and produces expected output
+    difficulty: mixed
+    count: 22
+    skills:
+      - groupby
+      - mean
+      - value_counts
+    source:
+      notebook: loan_notebook.ipynb
+      extractor: kaggle-qa-miner pipeline (step1-4)
+
+  # Shopping dataset questions (mined from Kaggle notebooks)
+  shopping/v1_mined:
+    dataset: shopping
+    file: shopping/v1_validated.jsonl
+    version: "2024-12-12"
+    description: Mined and validated Q&A from shopping notebook with business insight grading
+    difficulty: mixed
+    count: 7
+    skills:
+      - groupby
+      - mean
+      - value_counts
+      - mode
+      - idxmax
+      - idxmin
+    source:
+      notebook: shopping-analysis.ipynb
+      extractor: kaggle-qa-miner pipeline (step1-4)
+    grades:
+      insight_types: [descriptive, comparative]
+      business_relevance: ">=2"
+      overall_value: medium
+
+  # Bank dataset questions (mined from Kaggle notebooks)
+  bank/v1_validated:
+    dataset: bank
+    file: bank/v1_validated.jsonl
+    version: "2024-12-12"
+    description: Validated Q&A from bank marketing notebook
+    difficulty: mixed
+    count: 18
+    skills:
+      - groupby
+      - mean
+      - value_counts
+      - filtering
+      - percentage
+    source:
+      notebook: subscribe-or-not.ipynb
+      extractor: kaggle-qa-miner pipeline (step1-4)
+    grades:
+      insight_types: [descriptive, comparative]
+      business_relevance: "level 2"
+      overall_value: medium
+
+  # Road dataset questions (mined from Kaggle notebooks)
+  road/v1_validated:
+    dataset: road
+    file: road/v1_validated.jsonl
+    version: "2024-12-12"
+    description: Validated Q&A from road accident risk notebook
+    difficulty: mixed
+    count: 10
+    skills:
+      - groupby
+      - mean
+      - value_counts
+      - corr
+      - idxmax
+    source:
+      notebook: accident-risk-eda.ipynb
+      extractor: kaggle-qa-miner pipeline (step1-4)
+    grades:
+      insight_types: [descriptive, comparative, diagnostic]
+      business_relevance: "level 2-3"
+      overall_value: [medium, high]
+
+# Future question sets (planned)
+# shopping/v2_groupby:
+#   dataset: shopping
+#   difficulty: medium
+#   skills: [groupby, agg, pivot_table]
+#
+# shopping/v3_complex:
+#   dataset: shopping
+#   difficulty: hard
+#   skills: [merge, multi_step, filtering]

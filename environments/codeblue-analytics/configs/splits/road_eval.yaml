@@ -1,0 +1,9 @@
+name: road_eval
+description: Road accident risk Q&A evaluation - 10 validated questions
+version: "1.0.0"
+
+include:
+  - question_set: road/v1_validated
+
+settings:
+  max_questions: 10

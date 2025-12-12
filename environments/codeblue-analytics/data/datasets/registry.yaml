@@ -1,0 +1,278 @@
+# Dataset Registry
+# Defines all available datasets for CodeBlue Analytics
+
+datasets:
+  shopping:
+    name: Customer Shopping Dataset
+    description: E-commerce customer purchase behavior dataset
+    source: kaggle
+    source_url: https://www.kaggle.com/datasets/iamsouravbanerjee/customer-shopping-trends-dataset
+    file: shopping/data.csv
+    rows: 3900
+    columns: 18
+    schema:
+      - name: Customer ID
+        type: int64
+        description: Unique customer identifier
+      - name: Age
+        type: int64
+        description: Customer age
+      - name: Gender
+        type: object
+        description: Customer gender (Male/Female)
+      - name: Item Purchased
+        type: object
+        description: Name of item purchased
+      - name: Category
+        type: object
+        description: Product category (Clothing, Footwear, etc.)
+      - name: Purchase Amount (USD)
+        type: int64
+        description: Purchase amount in USD
+      - name: Location
+        type: object
+        description: Customer location (US state)
+      - name: Size
+        type: object
+        description: Product size (S, M, L, XL)
+      - name: Color
+        type: object
+        description: Product color
+      - name: Season
+        type: object
+        description: Season of purchase
+      - name: Review Rating
+        type: float64
+        description: Customer review rating (1-5)
+      - name: Subscription Status
+        type: object
+        description: Subscription status (Yes/No)
+      - name: Shipping Type
+        type: object
+        description: Type of shipping
+      - name: Discount Applied
+        type: object
+        description: Whether discount was applied
+      - name: Promo Code Used
+        type: object
+        description: Whether promo code was used
+      - name: Previous Purchases
+        type: int64
+        description: Number of previous purchases
+      - name: Payment Method
+        type: object
+        description: Payment method used
+      - name: Frequency of Purchases
+        type: object
+        description: Purchase frequency category
+
+  loan:
+    name: Loan Repayment Prediction Dataset
+    description: Loan repayment prediction dataset with borrower demographics and loan details
+    source: kaggle
+    source_url: https://www.kaggle.com/datasets/example/loan-payback
+    file: loan/data.csv
+    rows: 593994
+    columns: 13
+    schema:
+      - name: id
+        type: int64
+        description: Unique loan identifier
+      - name: annual_income
+        type: float64
+        description: Borrower annual income
+      - name: debt_to_income_ratio
+        type: float64
+        description: Debt-to-income ratio
+      - name: credit_score
+        type: int64
+        description: Borrower credit score
+      - name: loan_amount
+        type: float64
+        description: Loan amount
+      - name: interest_rate
+        type: float64
+        description: Interest rate on loan
+      - name: gender
+        type: object
+        description: Borrower gender (Male/Female)
+      - name: marital_status
+        type: object
+        description: Marital status (Single/Married)
+      - name: education_level
+        type: object
+        description: Education level
+      - name: employment_status
+        type: object
+        description: Employment status
+      - name: loan_purpose
+        type: object
+        description: Purpose of loan
+      - name: grade_subgrade
+        type: object
+        description: Loan grade/subgrade
+      - name: loan_paid_back
+        type: float64
+        description: Loan repayment status (1=paid, 0=default)
+
+  bank:
+    name: Bank Marketing Dataset
+    description: Bank marketing campaign dataset predicting term deposit subscription
+    source: kaggle
+    source_url: https://www.kaggle.com/competitions/playground-series-s4e1
+    file: bank/data.csv
+    rows: 750000
+    columns: 18
+    schema:
+      - name: id
+        type: int64
+        description: Unique identifier
+      - name: age
+        type: int64
+        description: Customer age
+      - name: job
+        type: object
+        description: Job type (admin, blue-collar, technician, etc.)
+      - name: marital
+        type: object
+        description: Marital status (married, single, divorced)
+      - name: education
+        type: object
+        description: Education level (primary, secondary, tertiary)
+      - name: default
+        type: object
+        description: Has credit in default (yes/no)
+      - name: balance
+        type: int64
+        description: Average yearly balance
+      - name: housing
+        type: object
+        description: Has housing loan (yes/no)
+      - name: loan
+        type: object
+        description: Has personal loan (yes/no)
+      - name: contact
+        type: object
+        description: Contact communication type
+      - name: day
+        type: int64
+        description: Last contact day of month
+      - name: month
+        type: object
+        description: Last contact month
+      - name: duration
+        type: int64
+        description: Last contact duration in seconds
+      - name: campaign
+        type: int64
+        description: Number of contacts during this campaign
+      - name: pdays
+        type: int64
+        description: Days since last contact from previous campaign
+      - name: previous
+        type: int64
+        description: Number of contacts before this campaign
+      - name: poutcome
+        type: object
+        description: Outcome of previous marketing campaign
+      - name: y
+        type: int64
+        description: Has subscribed to term deposit (1=yes, 0=no)
+
+  road:
+    name: Road Accident Risk Dataset
+    description: Road safety dataset predicting accident risk based on road and environmental factors
+    source: kaggle
+    source_url: https://www.kaggle.com/competitions/playground-series-s5e6
+    file: road/data.csv
+    rows: 517754
+    columns: 14
+    schema:
+      - name: id
+        type: int64
+        description: Unique identifier
+      - name: road_type
+        type: object
+        description: Type of road (urban, highway, rural)
+      - name: num_lanes
+        type: int64
+        description: Number of lanes
+      - name: curvature
+        type: float64
+        description: Road curvature (0-1)
+      - name: speed_limit
+        type: int64
+        description: Speed limit (mph)
+      - name: lighting
+        type: object
+        description: Lighting condition (daylight, dim, night)
+      - name: weather
+        type: object
+        description: Weather condition (clear, rainy, foggy)
+      - name: road_signs_present
+        type: bool
+        description: Road signs present (True/False)
+      - name: public_road
+        type: bool
+        description: Is public road (True/False)
+      - name: time_of_day
+        type: object
+        description: Time of day (morning, afternoon, evening, night)
+      - name: holiday
+        type: bool
+        description: Is holiday (True/False)
+      - name: school_season
+        type: bool
+        description: Is school season (True/False)
+      - name: num_reported_accidents
+        type: int64
+        description: Number of reported accidents
+      - name: accident_risk
+        type: float64
+        description: Accident risk score (0-1)
+
+  heart:
+    name: Heart Failure Prediction Dataset
+    description: Clinical dataset for heart disease prediction
+    source: kaggle
+    source_url: https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction
+    file: heart/data.csv
+    rows: 918
+    columns: 12
+    schema:
+      - name: Age
+        type: int64
+        description: Patient age in years
+      - name: Sex
+        type: object
+        description: Patient sex (M/F)
+      - name: ChestPainType
+        type: object
+        description: Type of chest pain (TA, ATA, NAP, ASY)
+      - name: RestingBP
+        type: int64
+        description: Resting blood pressure (mm Hg)
+      - name: Cholesterol
+        type: int64
+        description: Serum cholesterol (mg/dl)
+      - name: FastingBS
+        type: int64
+        description: Fasting blood sugar > 120 mg/dl (1/0)
+      - name: RestingECG
+        type: object
+        description: Resting ECG results
+      - name: MaxHR
+        type: int64
+        description: Maximum heart rate achieved
+      - name: ExerciseAngina
+        type: object
+        description: Exercise-induced angina (Y/N)
+      - name: Oldpeak
+        type: float64
+        description: ST depression induced by exercise
+      - name: ST_Slope
+        type: object
+        description: Slope of peak exercise ST segment
+      - name: HeartDisease
+        type: int64
+        description: Heart disease indicator (1/0)
