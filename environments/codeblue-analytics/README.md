@@ -1,6 +1,6 @@
 # CodeBlue: DataAnalytics
 
-![Version](https://img.shields.io/badge/version-0.1.8-blue)
+![Version](https://img.shields.io/badge/version-0.1.9-blue)
 ![Python](https://img.shields.io/badge/python-3.10+-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
@@ -104,15 +104,12 @@ Complex multi-step reasoning requiring 3+ operations:
 | 6 | **Gemini 2.5 Flash** | 48/49 (98%) | 25/49 | **51.0%** |
 | 7 | **DeepSeek Chat** | 48/49 (98%) | 24/49 | **49.0%** |
 | 8 | **Llama 3.1 70B Instruct** | 47/49 (96%) | 20/49 | **40.8%** |
-| 9 | **Gemini 3 Pro Preview** | 11/49 (22%) | 9/49 | **18.4%** |
-| 10 | **Prime Intellect Intellect-3** | 6/49 (12%) | 3/49 | **6.1%** |
-| 11 | **Gemini 2.5 Pro** | 0/49 (0%) | 0/49 | **0%** |
 
 **Key Findings:**
 - ✅ **Top performers** (Qwen3 Max, Claude Opus 4.5) achieve 71-76% accuracy on complex multi-hop analytics
 - ⚠️ **Mid-tier models** (GPT-5.1, Grok 4, Qwen 2.5) achieve 57-65% with near-perfect execution
-- ❌ **Gemini models struggle** with code generation (18.4% down to 0% for 2.5 Pro)
-- 📊 **Execution success** is high (95-100%) for most models - main challenge is correctness
+- 📊 **Execution success** is high (95-100%) for all models - main challenge is correctness, not syntax
+- 🎯 **Challenge level**: Even best models struggle with 25% of L4/L5 multi-hop questions
 
 *Full benchmark results and per-question analysis available in `results/bank_v2_hard/`*
 
@@ -350,7 +347,7 @@ MIT License - See LICENSE file for details
 
 - **Prime Environment Hub**: [codeblue/codeblue-analytics](https://app.primeintellect.ai/dashboard/environments/codeblue/codeblue-analytics)
 - **Install**: `prime env install codeblue/codeblue-analytics`
-- **Version**: 0.1.8
+- **Version**: 0.1.9
 - **Last Updated**: 2025-12-14
 
 ---
@@ -364,7 +361,7 @@ If you use this environment in your research, please cite:
   title = {CodeBlue DataAnalytics: A Comprehensive RLVR Environment for Pandas Code Generation},
   author = {CodeBlue Team},
   year = {2025},
-  version = {0.1.8},
+  version = {0.1.9},
   url = {https://app.primeintellect.ai/dashboard/environments/codeblue/codeblue-analytics}
 }
 ```
