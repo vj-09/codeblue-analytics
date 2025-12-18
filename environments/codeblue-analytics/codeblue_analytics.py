@@ -236,15 +236,32 @@ def execute_code(code: str, df: pd.DataFrame) -> tuple[bool, Any, str]:
         return False, None, str(e)
 
 
-def compare_outputs(result: Any, expected: Any, output_type: str) -> bool:
-    """Compare result to expected output."""
+def compare_outputs(result: Any, expected: Any, output_type: str, validation_source: str = "parsed") -> bool:
+    """Compare result to expected output with 2-decimal rounding.
+
+    Args:
+        result: The computed result from executed code
+        expected: The expected output (should be exact computed_output from gold code)
+        output_type: Type of output (scalar, series, dataframe, string)
+        validation_source: Source of expected output (parsed, computed) - for logging/debugging
+    """
+    def values_match(r_val: Any, e_val: Any) -> bool:
+        """Compare two values - round floats to 2 decimals."""
+        if isinstance(r_val, (int, float, np.number)) and isinstance(e_val, (int, float, np.number)):
+            # Round both values to 2 decimal places for comparison
+            r_rounded = round(float(r_val), 2)
+            e_rounded = round(float(e_val), 2)
+            return r_rounded == e_rounded
+        # For non-numeric, exact match
+        return r_val == e_val
+
     try:
         if output_type == "scalar":
             # If result is a Series/DataFrame when scalar expected, it's wrong
             if isinstance(result, (pd.Series, pd.DataFrame)):
                 return False
             if isinstance(result, (int, float, np.number)) and isinstance(expected, (int, float)):
-                return abs(float(result) - float(expected)) < 0.01
+                return values_match(result, expected)
             # Ensure comparison returns a scalar boolean
             comparison = result == expected
             if isinstance(comparison, (pd.Series, pd.DataFrame, np.ndarray)):
@@ -266,13 +283,10 @@ def compare_outputs(result: Any, expected: Any, output_type: str) -> bool:
             expected = expected.sort_index()
             if not result.index.equals(expected.index):
                 return False
-            # Check values with tolerance for floats
+            # Check values with tolerance
             for idx in result.index:
                 r_val, e_val = result[idx], expected[idx]
-                if isinstance(r_val, (float, np.floating)) or isinstance(e_val, (float, np.floating)):
-                    if abs(float(r_val) - float(e_val)) >= 0.01:
-                        return False
-                elif r_val != e_val:
+                if not values_match(r_val, e_val):
                     return False
             return True
 
@@ -324,12 +338,13 @@ def correctness_reward(completion: str, info: Dict, **kwargs) -> float:
     # Deserialize expected output from JSON
     expected = json.loads(info["expected_output_json"])
     output_type = info["output_type"]
+    validation_source = info.get("validation_source", "parsed")
 
     success, result, _ = execute_code(code, df)
     if not success:
         return 0.0
 
-    return 1.0 if compare_outputs(result, expected, output_type) else 0.0
+    return 1.0 if compare_outputs(result, expected, output_type, validation_source) else 0.0
 
 
 # ============================================================
@@ -385,6 +400,16 @@ def load_environment(
 
         category = metadata.get("computation_type") or q.get("category", "other")
 
+        # Determine validation source: vision or parsed
+        # Vision-validated questions have data_type='image' or vision_data present
+        validation_source = q.get("validation_source")  # New schema
+        if not validation_source:
+            # Fallback: infer from data_type or vision_data presence
+            if q.get("data_type") == "image" or q.get("vision_data") is not None:
+                validation_source = "vision"
+            else:
+                validation_source = "parsed"
+
         dataset_records.append({
             "prompt": prompt,
             "answer": q["gold_code"],
@@ -395,6 +420,7 @@ def load_environment(
                 "category": category,
                 "expected_output_json": json.dumps(q["expected_output"]),
                 "output_type": q["output_type"],
+                "validation_source": validation_source,
             }
         })
 

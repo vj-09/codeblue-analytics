@@ -1,0 +1,4 @@
+name: shopping_eval
+description: Shopping dataset evaluation
+include:
+  - question_set: shopping/v1_mined

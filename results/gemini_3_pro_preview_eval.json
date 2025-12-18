@@ -1,0 +1,418 @@
+[
+  {
+    "question_id": "shopping_v1_001",
+    "question": "How many duplicate customer records exist in the dataset?",
+    "exec_success": false,
+    "correct": false,
+    "generated_code": null,
+    "result": null,
+    "expected": 0,
+    "error": "No code extracted from response",
+    "model_id": "google/gemini-3-pro-preview",
+    "timestamp": "2025-12-14T15:17:51.534063",
+    "metadata": {
+      "level": 1,
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "shopping"
+    },
+    "metrics": {
+      "execution_time": 10.638207912445068
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (shopping)\nShape: 3900 rows \u00d7 18 columns\n\nColumns and types:\n  - Customer ID: int64\n  - Age: int64\n  - Gender: object\n  - Item Purchased: object\n  - Category: object\n  - Purchase Amount (USD): int64\n  - Location: object\n  - Size: object\n  - Color: object\n  - Season: object\n  - Review Rating: float64\n  - Subscription Status: object\n  - Shipping Type: object\n  - Discount Applied: object\n  - Promo Code Used: object\n  - Previous Purchases: int64\n  - Payment Method: object\n  - Frequency of Purchases: object\n\nFirst 3 rows:\n|   Customer ID |   Age | Gender   | Item Purchased   | Category   |   Purchase Amount (USD) | Location      | Size   | Color   | Season   |   Review Rating | Subscription Status   | Shipping Type   | Discount Applied   | Promo Code Used   |   Previous Purchases | Payment Method   | Frequency of Purchases   |\n|--------------:|------:|:---------|:-----------------|:-----------|------------------------:|:--------------|:-------|:--------|:---------|----------------:|:----------------------|:----------------|:-------------------|:------------------|---------------------:|:-----------------|:-------------------------|\n|             1 |    55 | Male     | Blouse           | Clothing   |                      53 | Kentucky      | L      | Gray    | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                   14 | Venmo            | Fortnightly              |\n|             2 |    19 | Male     | Sweater          | Clothing   |                      64 | Maine         | L      | Maroon  | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                    2 | Cash             | Fortnightly              |\n|             3 |    50 | Male     | Jeans            | Clothing   |                      73 | Massachusetts | S      | Maroon  | Spring   |             3.1 | Yes                   | Free Shipping   | Yes                | Yes               |                   23 | Credit Card      | Weekly                   |\n\nQuestion: How many duplicate customer records exist in the dataset?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "shopping_v1_002",
+    "question": "How many missing values are there in each column of the customer purchase dataset?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "result = df.isnull().sum()",
+    "result": {
+      "Customer ID": 0,
+      "Age": 0,
+      "Gender": 0,
+      "Item Purchased": 0,
+      "Category": 0,
+      "Purchase Amount (USD)": 0,
+      "Location": 0,
+      "Size": 0,
+      "Color": 0,
+      "Season": 0,
+      "Review Rating": 0,
+      "Subscription Status": 0,
+      "Shipping Type": 0,
+      "Discount Applied": 0,
+      "Promo Code Used": 0,
+      "Previous Purchases": 0,
+      "Payment Method": 0,
+      "Frequency of Purchases": 0
+    },
+    "expected": {
+      "Customer ID": 0,
+      "Age": 0,
+      "Gender": 0,
+      "Item Purchased": 0,
+      "Category": 0,
+      "Purchase Amount (USD)": 0,
+      "Location": 0,
+      "Size": 0,
+      "Color": 0,
+      "Season": 0,
+      "Review Rating": 0,
+      "Subscription Status": 0,
+      "Shipping Type": 0,
+      "Discount Applied": 0,
+      "Promo Code Used": 0,
+      "Previous Purchases": 0,
+      "Payment Method": 0,
+      "Frequency of Purchases": 0
+    },
+    "error": null,
+    "model_id": "google/gemini-3-pro-preview",
+    "timestamp": "2025-12-14T15:18:02.172367",
+    "metadata": {
+      "level": 1,
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "shopping"
+    },
+    "metrics": {
+      "execution_time": 5.111778020858765
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (shopping)\nShape: 3900 rows \u00d7 18 columns\n\nColumns and types:\n  - Customer ID: int64\n  - Age: int64\n  - Gender: object\n  - Item Purchased: object\n  - Category: object\n  - Purchase Amount (USD): int64\n  - Location: object\n  - Size: object\n  - Color: object\n  - Season: object\n  - Review Rating: float64\n  - Subscription Status: object\n  - Shipping Type: object\n  - Discount Applied: object\n  - Promo Code Used: object\n  - Previous Purchases: int64\n  - Payment Method: object\n  - Frequency of Purchases: object\n\nFirst 3 rows:\n|   Customer ID |   Age | Gender   | Item Purchased   | Category   |   Purchase Amount (USD) | Location      | Size   | Color   | Season   |   Review Rating | Subscription Status   | Shipping Type   | Discount Applied   | Promo Code Used   |   Previous Purchases | Payment Method   | Frequency of Purchases   |\n|--------------:|------:|:---------|:-----------------|:-----------|------------------------:|:--------------|:-------|:--------|:---------|----------------:|:----------------------|:----------------|:-------------------|:------------------|---------------------:|:-----------------|:-------------------------|\n|             1 |    55 | Male     | Blouse           | Clothing   |                      53 | Kentucky      | L      | Gray    | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                   14 | Venmo            | Fortnightly              |\n|             2 |    19 | Male     | Sweater          | Clothing   |                      64 | Maine         | L      | Maroon  | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                    2 | Cash             | Fortnightly              |\n|             3 |    50 | Male     | Jeans            | Clothing   |                      73 | Massachusetts | S      | Maroon  | Spring   |             3.1 | Yes                   | Free Shipping   | Yes                | Yes               |                   23 | Credit Card      | Weekly                   |\n\nQuestion: How many missing values are there in each column of the customer purchase dataset?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "shopping_v1_003",
+    "question": "What is the average purchase amount for each product category?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "result = df.groupby('Category')['Purchase Amount (USD)'].mean()",
+    "result": {
+      "Accessories": 59.83870967741935,
+      "Clothing": 60.025331030512376,
+      "Footwear": 60.25542570951586,
+      "Outerwear": 57.17283950617284
+    },
+    "expected": {
+      "Accessories": 59.83870967741935,
+      "Clothing": 60.025331030512376,
+      "Footwear": 60.25542570951586,
+      "Outerwear": 57.17283950617284
+    },
+    "error": null,
+    "model_id": "google/gemini-3-pro-preview",
+    "timestamp": "2025-12-14T15:18:07.284291",
+    "metadata": {
+      "level": 3,
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "shopping"
+    },
+    "metrics": {
+      "execution_time": 5.374808073043823
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (shopping)\nShape: 3900 rows \u00d7 18 columns\n\nColumns and types:\n  - Customer ID: int64\n  - Age: int64\n  - Gender: object\n  - Item Purchased: object\n  - Category: object\n  - Purchase Amount (USD): int64\n  - Location: object\n  - Size: object\n  - Color: object\n  - Season: object\n  - Review Rating: float64\n  - Subscription Status: object\n  - Shipping Type: object\n  - Discount Applied: object\n  - Promo Code Used: object\n  - Previous Purchases: int64\n  - Payment Method: object\n  - Frequency of Purchases: object\n\nFirst 3 rows:\n|   Customer ID |   Age | Gender   | Item Purchased   | Category   |   Purchase Amount (USD) | Location      | Size   | Color   | Season   |   Review Rating | Subscription Status   | Shipping Type   | Discount Applied   | Promo Code Used   |   Previous Purchases | Payment Method   | Frequency of Purchases   |\n|--------------:|------:|:---------|:-----------------|:-----------|------------------------:|:--------------|:-------|:--------|:---------|----------------:|:----------------------|:----------------|:-------------------|:------------------|---------------------:|:-----------------|:-------------------------|\n|             1 |    55 | Male     | Blouse           | Clothing   |                      53 | Kentucky      | L      | Gray    | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                   14 | Venmo            | Fortnightly              |\n|             2 |    19 | Male     | Sweater          | Clothing   |                      64 | Maine         | L      | Maroon  | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                    2 | Cash             | Fortnightly              |\n|             3 |    50 | Male     | Jeans            | Clothing   |                      73 | Massachusetts | S      | Maroon  | Spring   |             3.1 | Yes                   | Free Shipping   | Yes                | Yes               |                   23 | Credit Card      | Weekly                   |\n\nQuestion: What is the average purchase amount for each product category?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "shopping_v1_004",
+    "question": "What is the average purchase amount for each season?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "result = df.groupby('Season')['Purchase Amount (USD)'].mean()",
+    "result": {
+      "Fall": 61.55692307692308,
+      "Spring": 58.73773773773774,
+      "Summer": 58.405235602094244,
+      "Winter": 60.35736354273944
+    },
+    "expected": {
+      "Fall": 61.55692307692308,
+      "Spring": 58.73773773773774,
+      "Summer": 58.405235602094244,
+      "Winter": 60.35736354273944
+    },
+    "error": null,
+    "model_id": "google/gemini-3-pro-preview",
+    "timestamp": "2025-12-14T15:18:12.659260",
+    "metadata": {
+      "level": 3,
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "shopping"
+    },
+    "metrics": {
+      "execution_time": 5.089179754257202
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (shopping)\nShape: 3900 rows \u00d7 18 columns\n\nColumns and types:\n  - Customer ID: int64\n  - Age: int64\n  - Gender: object\n  - Item Purchased: object\n  - Category: object\n  - Purchase Amount (USD): int64\n  - Location: object\n  - Size: object\n  - Color: object\n  - Season: object\n  - Review Rating: float64\n  - Subscription Status: object\n  - Shipping Type: object\n  - Discount Applied: object\n  - Promo Code Used: object\n  - Previous Purchases: int64\n  - Payment Method: object\n  - Frequency of Purchases: object\n\nFirst 3 rows:\n|   Customer ID |   Age | Gender   | Item Purchased   | Category   |   Purchase Amount (USD) | Location      | Size   | Color   | Season   |   Review Rating | Subscription Status   | Shipping Type   | Discount Applied   | Promo Code Used   |   Previous Purchases | Payment Method   | Frequency of Purchases   |\n|--------------:|------:|:---------|:-----------------|:-----------|------------------------:|:--------------|:-------|:--------|:---------|----------------:|:----------------------|:----------------|:-------------------|:------------------|---------------------:|:-----------------|:-------------------------|\n|             1 |    55 | Male     | Blouse           | Clothing   |                      53 | Kentucky      | L      | Gray    | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                   14 | Venmo            | Fortnightly              |\n|             2 |    19 | Male     | Sweater          | Clothing   |                      64 | Maine         | L      | Maroon  | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                    2 | Cash             | Fortnightly              |\n|             3 |    50 | Male     | Jeans            | Clothing   |                      73 | Massachusetts | S      | Maroon  | Spring   |             3.1 | Yes                   | Free Shipping   | Yes                | Yes               |                   23 | Credit Card      | Weekly                   |\n\nQuestion: What is the average purchase amount for each season?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "shopping_v1_005",
+    "question": "What is the percentage distribution of purchases across different seasons?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "result = df['Season'].value_counts(normalize=True) * 100",
+    "result": {
+      "Spring": 25.615384615384617,
+      "Fall": 25.0,
+      "Winter": 24.897435897435898,
+      "Summer": 24.487179487179485
+    },
+    "expected": {
+      "Spring": 25.615384615384617,
+      "Fall": 25.0,
+      "Winter": 24.897435897435898,
+      "Summer": 24.487179487179485
+    },
+    "error": null,
+    "model_id": "google/gemini-3-pro-preview",
+    "timestamp": "2025-12-14T15:18:17.748607",
+    "metadata": {
+      "level": 1,
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "shopping"
+    },
+    "metrics": {
+      "execution_time": 7.097493648529053
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (shopping)\nShape: 3900 rows \u00d7 18 columns\n\nColumns and types:\n  - Customer ID: int64\n  - Age: int64\n  - Gender: object\n  - Item Purchased: object\n  - Category: object\n  - Purchase Amount (USD): int64\n  - Location: object\n  - Size: object\n  - Color: object\n  - Season: object\n  - Review Rating: float64\n  - Subscription Status: object\n  - Shipping Type: object\n  - Discount Applied: object\n  - Promo Code Used: object\n  - Previous Purchases: int64\n  - Payment Method: object\n  - Frequency of Purchases: object\n\nFirst 3 rows:\n|   Customer ID |   Age | Gender   | Item Purchased   | Category   |   Purchase Amount (USD) | Location      | Size   | Color   | Season   |   Review Rating | Subscription Status   | Shipping Type   | Discount Applied   | Promo Code Used   |   Previous Purchases | Payment Method   | Frequency of Purchases   |\n|--------------:|------:|:---------|:-----------------|:-----------|------------------------:|:--------------|:-------|:--------|:---------|----------------:|:----------------------|:----------------|:-------------------|:------------------|---------------------:|:-----------------|:-------------------------|\n|             1 |    55 | Male     | Blouse           | Clothing   |                      53 | Kentucky      | L      | Gray    | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                   14 | Venmo            | Fortnightly              |\n|             2 |    19 | Male     | Sweater          | Clothing   |                      64 | Maine         | L      | Maroon  | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                    2 | Cash             | Fortnightly              |\n|             3 |    50 | Male     | Jeans            | Clothing   |                      73 | Massachusetts | S      | Maroon  | Spring   |             3.1 | Yes                   | Free Shipping   | Yes                | Yes               |                   23 | Credit Card      | Weekly                   |\n\nQuestion: What is the percentage distribution of purchases across different seasons?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "shopping_v1_006",
+    "question": "How many customers are there for each purchase frequency category?",
+    "exec_success": false,
+    "correct": false,
+    "generated_code": null,
+    "result": null,
+    "expected": {
+      "Every 3 Months": 584,
+      "Annually": 572,
+      "Quarterly": 563,
+      "Monthly": 553,
+      "Bi-Weekly": 547,
+      "Fortnightly": 542,
+      "Weekly": 539
+    },
+    "error": "No code extracted from response",
+    "model_id": "google/gemini-3-pro-preview",
+    "timestamp": "2025-12-14T15:18:24.846305",
+    "metadata": {
+      "level": 1,
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "shopping"
+    },
+    "metrics": {
+      "execution_time": 9.874901294708252
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (shopping)\nShape: 3900 rows \u00d7 18 columns\n\nColumns and types:\n  - Customer ID: int64\n  - Age: int64\n  - Gender: object\n  - Item Purchased: object\n  - Category: object\n  - Purchase Amount (USD): int64\n  - Location: object\n  - Size: object\n  - Color: object\n  - Season: object\n  - Review Rating: float64\n  - Subscription Status: object\n  - Shipping Type: object\n  - Discount Applied: object\n  - Promo Code Used: object\n  - Previous Purchases: int64\n  - Payment Method: object\n  - Frequency of Purchases: object\n\nFirst 3 rows:\n|   Customer ID |   Age | Gender   | Item Purchased   | Category   |   Purchase Amount (USD) | Location      | Size   | Color   | Season   |   Review Rating | Subscription Status   | Shipping Type   | Discount Applied   | Promo Code Used   |   Previous Purchases | Payment Method   | Frequency of Purchases   |\n|--------------:|------:|:---------|:-----------------|:-----------|------------------------:|:--------------|:-------|:--------|:---------|----------------:|:----------------------|:----------------|:-------------------|:------------------|---------------------:|:-----------------|:-------------------------|\n|             1 |    55 | Male     | Blouse           | Clothing   |                      53 | Kentucky      | L      | Gray    | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                   14 | Venmo            | Fortnightly              |\n|             2 |    19 | Male     | Sweater          | Clothing   |                      64 | Maine         | L      | Maroon  | Winter   |             3.1 | Yes                   | Express         | Yes                | Yes               |                    2 | Cash             | Fortnightly              |\n|             3 |    50 | Male     | Jeans            | Clothing   |                      73 | Massachusetts | S      | Maroon  | Spring   |             3.1 | Yes                   | Free Shipping   | Yes                | Yes               |                   23 | Credit Card      | Weekly                   |\n\nQuestion: How many customers are there for each purchase frequency category?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "heart_v1_001",
+    "question": "What is the heart disease rate for each sex?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "result = df.groupby('Sex')['HeartDisease'].mean()",
+    "result": {
+      "F": 0.25906735751295334,
+      "M": 0.6317241379310344
+    },
+    "expected": {
+      "F": 0.25906735751295334,
+      "M": 0.6317241379310344
+    },
+    "error": null,
+    "model_id": "google/gemini-3-pro-preview",
+    "timestamp": "2025-12-14T15:18:34.721327",
+    "metadata": {
+      "level": 3,
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "heart"
+    },
+    "metrics": {
+      "execution_time": 6.444000005722046
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (heart)\nShape: 918 rows \u00d7 12 columns\n\nColumns and types:\n  - Age: int64\n  - Sex: object\n  - ChestPainType: object\n  - RestingBP: int64\n  - Cholesterol: int64\n  - FastingBS: int64\n  - RestingECG: object\n  - MaxHR: int64\n  - ExerciseAngina: object\n  - Oldpeak: float64\n  - ST_Slope: object\n  - HeartDisease: int64\n\nFirst 3 rows:\n|   Age | Sex   | ChestPainType   |   RestingBP |   Cholesterol |   FastingBS | RestingECG   |   MaxHR | ExerciseAngina   |   Oldpeak | ST_Slope   |   HeartDisease |\n|------:|:------|:----------------|------------:|--------------:|------------:|:-------------|--------:|:-----------------|----------:|:-----------|---------------:|\n|    40 | M     | ATA             |         140 |           289 |           0 | Normal       |     172 | N                |         0 | Up         |              0 |\n|    49 | F     | NAP             |         160 |           180 |           0 | Normal       |     156 | N                |         1 | Flat       |              1 |\n|    37 | M     | ATA             |         130 |           283 |           0 | ST           |      98 | N                |         0 | Up         |              0 |\n\nQuestion: What is the heart disease rate for each sex?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "heart_v1_002",
+    "question": "What is the heart disease rate for each chest pain type?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "result = df.groupby('ChestPainType')['HeartDisease'].mean()",
+    "result": {
+      "ASY": 0.7903225806451613,
+      "ATA": 0.13872832369942195,
+      "NAP": 0.35467980295566504,
+      "TA": 0.43478260869565216
+    },
+    "expected": {
+      "ASY": 0.7903225806451613,
+      "ATA": 0.13872832369942195,
+      "NAP": 0.35467980295566504,
+      "TA": 0.43478260869565216
+    },
+    "error": null,
+    "model_id": "google/gemini-3-pro-preview",
+    "timestamp": "2025-12-14T15:18:41.165416",
+    "metadata": {
+      "level": 3,
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "heart"
+    },
+    "metrics": {
+      "execution_time": 5.714215040206909
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (heart)\nShape: 918 rows \u00d7 12 columns\n\nColumns and types:\n  - Age: int64\n  - Sex: object\n  - ChestPainType: object\n  - RestingBP: int64\n  - Cholesterol: int64\n  - FastingBS: int64\n  - RestingECG: object\n  - MaxHR: int64\n  - ExerciseAngina: object\n  - Oldpeak: float64\n  - ST_Slope: object\n  - HeartDisease: int64\n\nFirst 3 rows:\n|   Age | Sex   | ChestPainType   |   RestingBP |   Cholesterol |   FastingBS | RestingECG   |   MaxHR | ExerciseAngina   |   Oldpeak | ST_Slope   |   HeartDisease |\n|------:|:------|:----------------|------------:|--------------:|------------:|:-------------|--------:|:-----------------|----------:|:-----------|---------------:|\n|    40 | M     | ATA             |         140 |           289 |           0 | Normal       |     172 | N                |         0 | Up         |              0 |\n|    49 | F     | NAP             |         160 |           180 |           0 | Normal       |     156 | N                |         1 | Flat       |              1 |\n|    37 | M     | ATA             |         130 |           283 |           0 | ST           |      98 | N                |         0 | Up         |              0 |\n\nQuestion: What is the heart disease rate for each chest pain type?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "heart_v1_003",
+    "question": "What is the heart disease rate for each exercise angina status?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "result = df.groupby('ExerciseAngina')['HeartDisease'].mean()",
+    "result": {
+      "N": 0.3510054844606947,
+      "Y": 0.8517520215633423
+    },
+    "expected": {
+      "N": 0.3510054844606947,
+      "Y": 0.8517520215633423
+    },
+    "error": null,
+    "model_id": "google/gemini-3-pro-preview",
+    "timestamp": "2025-12-14T15:18:46.879706",
+    "metadata": {
+      "level": 3,
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "heart"
+    },
+    "metrics": {
+      "execution_time": 6.919064998626709
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (heart)\nShape: 918 rows \u00d7 12 columns\n\nColumns and types:\n  - Age: int64\n  - Sex: object\n  - ChestPainType: object\n  - RestingBP: int64\n  - Cholesterol: int64\n  - FastingBS: int64\n  - RestingECG: object\n  - MaxHR: int64\n  - ExerciseAngina: object\n  - Oldpeak: float64\n  - ST_Slope: object\n  - HeartDisease: int64\n\nFirst 3 rows:\n|   Age | Sex   | ChestPainType   |   RestingBP |   Cholesterol |   FastingBS | RestingECG   |   MaxHR | ExerciseAngina   |   Oldpeak | ST_Slope   |   HeartDisease |\n|------:|:------|:----------------|------------:|--------------:|------------:|:-------------|--------:|:-----------------|----------:|:-----------|---------------:|\n|    40 | M     | ATA             |         140 |           289 |           0 | Normal       |     172 | N                |         0 | Up         |              0 |\n|    49 | F     | NAP             |         160 |           180 |           0 | Normal       |     156 | N                |         1 | Flat       |              1 |\n|    37 | M     | ATA             |         130 |           283 |           0 | ST           |      98 | N                |         0 | Up         |              0 |\n\nQuestion: What is the heart disease rate for each exercise angina status?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "heart_v1_004",
+    "question": "What is the heart disease rate for each ST slope category?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "result = df.groupby('ST_Slope')['HeartDisease'].mean()",
+    "result": {
+      "Down": 0.7777777777777778,
+      "Flat": 0.8282608695652174,
+      "Up": 0.19746835443037974
+    },
+    "expected": {
+      "Down": 0.7777777777777778,
+      "Flat": 0.8282608695652174,
+      "Up": 0.19746835443037974
+    },
+    "error": null,
+    "model_id": "google/gemini-3-pro-preview",
+    "timestamp": "2025-12-14T15:18:53.798835",
+    "metadata": {
+      "level": 3,
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "heart"
+    },
+    "metrics": {
+      "execution_time": 6.461845636367798
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (heart)\nShape: 918 rows \u00d7 12 columns\n\nColumns and types:\n  - Age: int64\n  - Sex: object\n  - ChestPainType: object\n  - RestingBP: int64\n  - Cholesterol: int64\n  - FastingBS: int64\n  - RestingECG: object\n  - MaxHR: int64\n  - ExerciseAngina: object\n  - Oldpeak: float64\n  - ST_Slope: object\n  - HeartDisease: int64\n\nFirst 3 rows:\n|   Age | Sex   | ChestPainType   |   RestingBP |   Cholesterol |   FastingBS | RestingECG   |   MaxHR | ExerciseAngina   |   Oldpeak | ST_Slope   |   HeartDisease |\n|------:|:------|:----------------|------------:|--------------:|------------:|:-------------|--------:|:-----------------|----------:|:-----------|---------------:|\n|    40 | M     | ATA             |         140 |           289 |           0 | Normal       |     172 | N                |         0 | Up         |              0 |\n|    49 | F     | NAP             |         160 |           180 |           0 | Normal       |     156 | N                |         1 | Flat       |              1 |\n|    37 | M     | ATA             |         130 |           283 |           0 | ST           |      98 | N                |         0 | Up         |              0 |\n\nQuestion: What is the heart disease rate for each ST slope category?",
+        "role": "user"
+      }
+    ]
+  }
+]

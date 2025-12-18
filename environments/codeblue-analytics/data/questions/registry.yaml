@@ -91,6 +91,26 @@ question_sets:
       business_relevance: ">=2"
       overall_value: medium
 
+  shopping/v2_validated:
+    dataset: shopping
+    file: shopping/v2_validated.jsonl
+    version: "2024-12-13"
+    description: Validated Q&A with flexible Q count and improved Step2 prompt
+    difficulty: mixed
+    count: 16
+    skills:
+      - groupby
+      - mean
+      - value_counts
+      - describe
+    source:
+      notebook: shopping-analysis.ipynb
+      extractor: kaggle-qa-miner pipeline (step1-4) with flexible Q/cell
+    grades:
+      insight_types: [descriptive]
+      business_relevance: ">=2"
+      overall_value: medium
+
   # Bank dataset questions (mined from Kaggle notebooks)
   bank/v1_validated:
     dataset: bank
@@ -112,6 +132,28 @@ question_sets:
       insight_types: [descriptive, comparative]
       business_relevance: "level 2"
       overall_value: medium
+
+  # Bank dataset questions - template-generated hard questions
+  bank/v2_hard:
+    dataset: bank
+    file: bank/v2_hard.jsonl
+    version: "2024-12-14"
+    description: Template-generated hard questions (L3-L5) with 40/35/25 distribution
+    difficulty: hard
+    count: 49
+    skills:
+      - groupby
+      - multi-hop
+      - quartile
+      - conversion_rate
+      - segment_analysis
+    source:
+      pipeline: qa-gen templates
+      extractor: step1-5 (schema, slots, qa, validate, select)
+    levels:
+      L5: 20  # 40.8%
+      L4: 17  # 34.7%
+      L3: 12  # 24.5%
 
   # Road dataset questions (mined from Kaggle notebooks)
   road/v1_validated:

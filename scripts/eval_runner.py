@@ -92,6 +92,11 @@ class EvalResult:
     result: Any
     expected: Any
     error: Optional[str] = None
+    model_id: str = ""
+    timestamp: str = ""
+    metadata: Dict[str, Any] = None
+    metrics: Dict[str, Any] = None
+    prompt: List[Dict] = None
 
 
 # ============================================================
@@ -104,7 +109,15 @@ async def call_openai(prompt: List[Dict], model: str) -> str:
     if not api_key:
         raise ValueError("OPENAI_API_KEY not set")
 
-    data = {"model": model, "max_tokens": 500, "messages": prompt}
+    data = {"model": model, "messages": prompt}
+    
+    # Handle O1 and GPT-5 specific parameter requirements
+    if model.startswith("o1") or "gpt-5" in model:
+        data["max_completion_tokens"] = 5000 # O1/GPT-5 use this instead of max_tokens
+        # O1/GPT-5 often don't support temperature or require it to be 1 (default)
+    else:
+        data["max_tokens"] = 500
+        
     result = subprocess.run(
         ['curl', '-s', 'https://api.openai.com/v1/chat/completions',
          '-H', f'Authorization: Bearer {api_key}',
@@ -172,13 +185,54 @@ async def call_prime(prompt: List[Dict], model: str) -> str:
     return resp['choices'][0]['message']['content']
 
 
+async def call_openai_completion(prompt: List[Dict], model: str) -> str:
+    """Call OpenAI Legacy Completion API (for Codex/Instruct models)."""
+    api_key = os.environ.get('OPENAI_API_KEY')
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY not set")
+
+    # Flatten prompt for completion API
+    full_prompt = ""
+    for m in prompt:
+        if m["role"] == "system":
+            full_prompt += f"# {m['content']}\n\n"
+        elif m["role"] == "user":
+            full_prompt += f"# {m['content']}\n\n"
+        elif m["role"] == "assistant":
+            full_prompt += f"{m['content']}\n\n"
+    
+    full_prompt += "```python\n" # Start code block to guide completion
+
+    data = {
+        "model": model, 
+        "prompt": full_prompt, 
+        "max_tokens": 500,
+        "temperature": 0,
+        "stop": ["```"]
+    }
+    
+    result = subprocess.run(
+        ['curl', '-s', 'https://api.openai.com/v1/completions',
+         '-H', f'Authorization: Bearer {api_key}',
+         '-H', 'Content-Type: application/json',
+         '-d', json.dumps(data)],
+        capture_output=True, text=True
+    )
+    resp = json.loads(result.stdout)
+    if 'error' in resp:
+        raise ValueError(f"OpenAI API error: {resp['error']}")
+    return resp['choices'][0]['text']
+
+
 async def call_model(prompt: List[Dict], model: str, backend: str) -> str:
     """Route model call to appropriate API."""
     if backend == "prime":
         return await call_prime(prompt, model)
     else:
         # Determine provider from model name
-        if 'gpt' in model:
+        if 'codex' in model or 'instruct' in model: # Heuristic for completion models
+             return await call_openai_completion(prompt, model)
+        elif 'gpt' in model:
             return await call_openai(prompt, model)
         elif 'claude' in model:
             return await call_anthropic(prompt, model)
@@ -200,12 +254,25 @@ async def evaluate_single(
     """Evaluate a single example."""
     import pandas as pd
     import numpy as np
+    import time
+    from datetime import datetime
+
+    start_time = time.time()
+    timestamp = datetime.now().isoformat()
 
     question_id = example['info']['question_id']
     df_name = example['info']['df_name']
     df = dataframes[df_name]
     expected = json.loads(example['info']['expected_output_json'])
     output_type = example['info']['output_type']
+    
+    # Extract metadata
+    metadata = {
+        'level': example['info'].get('level', 'unknown'),
+        'template': example['info'].get('template', 'unknown'),
+        'insight_type': example['info'].get('insight_type', 'unknown'),
+        'df_name': df_name
+    }
 
     # Extract question from prompt
     user_msg = example['prompt'][1]['content']
@@ -225,7 +292,12 @@ async def evaluate_single(
                 generated_code=None,
                 result=None,
                 expected=expected,
-                error="No code extracted from response"
+                error="No code extracted from response",
+                model_id=model,
+                timestamp=timestamp,
+                metadata=metadata,
+                metrics={'execution_time': time.time() - start_time},
+                prompt=example['prompt']
             )
 
         # Execute code
@@ -242,12 +314,17 @@ async def evaluate_single(
                 generated_code=code,
                 result=None,
                 expected=expected,
-                error="No 'result' variable found"
+                error="No 'result' variable found",
+                model_id=model,
+                timestamp=timestamp,
+                metadata=metadata,
+                metrics={'execution_time': time.time() - start_time},
+                prompt=example['prompt']
             )
 
         # Check correctness
         correct = compare_outputs(result, expected, output_type)
-
+        
         return EvalResult(
             question_id=question_id,
             question=question,
@@ -255,7 +332,13 @@ async def evaluate_single(
             correct=correct,
             generated_code=code,
             result=result,
-            expected=expected
+            expected=expected,
+            error=None,
+            model_id=model,
+            timestamp=timestamp,
+            metadata=metadata,
+            metrics={'execution_time': time.time() - start_time},
+            prompt=example['prompt']
         )
 
     except Exception as e:
@@ -264,11 +347,17 @@ async def evaluate_single(
             question=question,
             exec_success=False,
             correct=False,
-            generated_code=code if 'code' in dir() else None,
+            generated_code=None,
             result=None,
             expected=expected,
-            error=str(e)
+            error=str(e),
+            model_id=model,
+            timestamp=timestamp,
+            metadata=metadata,
+            metrics={'execution_time': time.time() - start_time},
+            prompt=example['prompt']
         )
+
 
 
 async def run_evaluation(
@@ -307,7 +396,12 @@ async def run_evaluation(
         result = await evaluate_single(example, model, backend, dataframes, verbose)
         results.append(result)
 
-        if result.correct:
+        # Handle potential Series/Array types for boolean check
+        is_correct = result.correct
+        if hasattr(is_correct, 'all'): # pandas Series or numpy array
+            is_correct = bool(is_correct.all())
+        
+        if is_correct:
             print("PASS")
         else:
             print("FAIL")
@@ -387,6 +481,37 @@ def list_models():
         print(f"  {model_id:35} - {info['name']}")
 
 
+def save_results(results: List[EvalResult], output_path: str):
+    """Save evaluation results to JSON file."""
+    import pandas as pd
+    import numpy as np
+    from dataclasses import asdict
+
+    class CustomEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, pd.DataFrame):
+                return obj.to_dict(orient='records')
+            if isinstance(obj, pd.Series):
+                return obj.to_dict()
+            if isinstance(obj, np.ndarray):
+                return obj.tolist()
+            if isinstance(obj, (np.integer, np.int64)):
+                return int(obj)
+            if isinstance(obj, (np.floating, np.float64)):
+                return float(obj)
+            if isinstance(obj, np.bool_):
+                return bool(obj)
+            return super().default(obj)
+
+    output_file = Path(output_path)
+    data = [asdict(r) for r in results]
+    
+    with open(output_file, 'w') as f:
+        json.dump(data, f, cls=CustomEncoder, indent=2)
+    
+    print(f"\nResults saved to {output_file.absolute()}")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Unified eval runner for CodeBlue: Data Analytics",
@@ -412,6 +537,7 @@ Examples:
     parser.add_argument('--backend', choices=['local', 'prime', 'prime-native'], default='local',
                         help='Evaluation backend: local (direct API), prime (Prime API), prime-native (prime env eval)')
     parser.add_argument('--model', default='gpt-4o-mini', help='Model to evaluate')
+    parser.add_argument('--output', help='Path to save results JSON')
     parser.add_argument('--num-examples', type=int, default=-1, help='Number of examples (-1 for all)')
     parser.add_argument('--verbose', '-v', action='store_true', help='Show detailed output')
     parser.add_argument('--list-splits', action='store_true', help='List available splits')
@@ -433,13 +559,16 @@ Examples:
         run_prime_eval(args.split, args.model)
     else:
         # Use our unified runner
-        asyncio.run(run_evaluation(
+        results = asyncio.run(run_evaluation(
             split=args.split,
             model=args.model,
             backend=args.backend,
             num_examples=args.num_examples,
             verbose=args.verbose
         ))
+        
+        if args.output:
+            save_results(results, args.output)
 
 
 if __name__ == '__main__':

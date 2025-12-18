@@ -1,0 +1,2311 @@
+[
+  {
+    "question_id": "bank_hard_001",
+    "question": "Divide customers into 4 day quartiles. What is the subscription percentage (0-100) in the lower-middle (25-50%) (Q2) quartile?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "df['day_quartile'] = pd.qcut(df['day'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\nq2_data = df[df['day_quartile'] == 'Q2']\nresult = (q2_data['y'].sum() / len(q2_data)) * 100",
+    "result": 14.038691138676974,
+    "expected": 14.04,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:47:30.421782",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 3.457129955291748
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Divide customers into 4 day quartiles. What is the subscription percentage (0-100) in the lower-middle (25-50%) (Q2) quartile?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_002",
+    "question": "Show the subscription percentage breakdown by job. Return a DataFrame with columns [job, count, rate] where rate is percentage (0-100), sorted by rate descending.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Calculate subscription counts and rates by job\njob_stats = df.groupby('job').agg(\n    count=('y', 'size'),\n    subscribed=('y', 'sum')\n).reset_index()\n\n# Calculate rate as percentage\njob_stats['rate'] = (job_stats['subscribed'] / job_stats['count']) * 100\n\n# Select required columns and sort by rate descending\nresult = job_stats[['job', 'count', 'rate']].sort_values('rate', ascending=False).reset_index(drop=True)",
+    "result": [
+      {
+        "job": "student",
+        "count": 11767,
+        "rate": 34.07835472082944
+      },
+      {
+        "job": "retired",
+        "count": 35185,
+        "rate": 24.62412960068211
+      },
+      {
+        "job": "unemployed",
+        "count": 17634,
+        "rate": 17.982306907111262
+      },
+      {
+        "job": "management",
+        "count": 175541,
+        "rate": 15.039221606348374
+      },
+      {
+        "job": "self-employed",
+        "count": 19020,
+        "rate": 12.944269190325972
+      },
+      {
+        "job": "unknown",
+        "count": 2917,
+        "rate": 12.067192320877613
+      },
+      {
+        "job": "technician",
+        "count": 138107,
+        "rate": 11.832130159948445
+      },
+      {
+        "job": "admin.",
+        "count": 81492,
+        "rate": 11.645314877533991
+      },
+      {
+        "job": "housemaid",
+        "count": 15912,
+        "rate": 8.465309200603318
+      },
+      {
+        "job": "services",
+        "count": 64209,
+        "rate": 8.271426124063606
+      },
+      {
+        "job": "entrepreneur",
+        "count": 17718,
+        "rate": 8.1386160966249
+      },
+      {
+        "job": "blue-collar",
+        "count": 170498,
+        "rate": 6.743774120517543
+      }
+    ],
+    "expected": [
+      {
+        "job": "student",
+        "count": 11767,
+        "rate": 34.08
+      },
+      {
+        "job": "retired",
+        "count": 35185,
+        "rate": 24.62
+      },
+      {
+        "job": "unemployed",
+        "count": 17634,
+        "rate": 17.98
+      },
+      {
+        "job": "management",
+        "count": 175541,
+        "rate": 15.04
+      },
+      {
+        "job": "self-employed",
+        "count": 19020,
+        "rate": 12.94
+      },
+      {
+        "job": "unknown",
+        "count": 2917,
+        "rate": 12.07
+      },
+      {
+        "job": "technician",
+        "count": 138107,
+        "rate": 11.83
+      },
+      {
+        "job": "admin.",
+        "count": 81492,
+        "rate": 11.65
+      },
+      {
+        "job": "housemaid",
+        "count": 15912,
+        "rate": 8.47
+      },
+      {
+        "job": "services",
+        "count": 64209,
+        "rate": 8.27
+      },
+      {
+        "job": "entrepreneur",
+        "count": 17718,
+        "rate": 8.14
+      },
+      {
+        "job": "blue-collar",
+        "count": 170498,
+        "rate": 6.74
+      }
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:47:33.905354",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.7693469524383545
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Show the subscription percentage breakdown by job. Return a DataFrame with columns [job, count, rate] where rate is percentage (0-100), sorted by rate descending.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_003",
+    "question": "Rank job categories by customer count. Return the top 3 as a list from highest to lowest count.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "result = df['job'].value_counts().head(3).index.tolist()",
+    "result": [
+      "management",
+      "blue-collar",
+      "technician"
+    ],
+    "expected": [
+      "management",
+      "blue-collar",
+      "technician"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:47:38.693781",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 3.1862571239471436
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Rank job categories by customer count. Return the top 3 as a list from highest to lowest count.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_004",
+    "question": "Which month categories are anomalies - having above-median balance but below-median subscription rate? Return sorted list.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Calculate median balance and subscription rate across all data\nmedian_balance = df['balance'].median()\nmedian_subscription_rate = df['y'].mean()\n\n# Calculate balance and subscription rate by month\nmonth_stats = df.groupby('month').agg({\n    'balance': 'mean',\n    'y': 'mean'\n}).rename(columns={'balance': 'avg_balance', 'y': 'subscription_rate'})\n\n# Find anomalies: above-median balance but below-median subscription rate\nanomalies = month_stats[\n    (month_stats['avg_balance'] > median_balance) & \n    (month_stats['subscription_rate'] < median_subscription_rate)\n]\n\n# Return sorted list of month categories\nresult = sorted(anomalies.index.tolist())",
+    "result": [
+      "aug",
+      "jul",
+      "jun",
+      "may",
+      "nov"
+    ],
+    "expected": [
+      "nov"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:47:41.899010",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.117125034332275
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which month categories are anomalies - having above-median balance but below-median subscription rate? Return sorted list.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_005",
+    "question": "Find the job with the lowest subscription rate. Within that group, what is the lowest average age?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by job\nsubscription_rate = df.groupby('job')['y'].mean()\n\n# Find the job with the lowest subscription rate\nlowest_rate_job = subscription_rate.idxmin()\n\n# Filter for that job and get the average age\nresult = df[df['job'] == lowest_rate_job]['age'].mean()",
+    "result": 40.450063930368685,
+    "expected": 40.45,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:47:47.035021",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.876222848892212
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Find the job with the lowest subscription rate. Within that group, what is the lowest average age?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_006",
+    "question": "Which month category has the highest subscription rate? If tied, return alphabetically first.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by month\nsubscription_rate = df.groupby('month')['y'].mean()\n\n# Find the highest subscription rate\nmax_rate = subscription_rate.max()\n\n# Get months with the highest rate (handle ties)\nmonths_with_max = subscription_rate[subscription_rate == max_rate].index.tolist()\n\n# Sort alphabetically and take the first one\nresult = sorted(months_with_max)[0]",
+    "result": "mar",
+    "expected": "mar",
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:47:51.930127",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.80443000793457
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which month category has the highest subscription rate? If tied, return alphabetically first.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_007",
+    "question": "How much higher is the subscription rate for month='may' compared to month='aug'? Return percentage points difference.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "may_rate = df[df['month'] == 'may']['y'].mean() * 100\naug_rate = df[df['month'] == 'aug']['y'].mean() * 100\nresult = may_rate - aug_rate",
+    "result": -4.080752318850501,
+    "expected": -4.08,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:47:56.753780",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.464854955673218
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: How much higher is the subscription rate for month='may' compared to month='aug'? Return percentage points difference.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_008",
+    "question": "Which job categories have more than 50000 customers? Return as a sorted list.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "job_counts = df['job'].value_counts()\njobs_over_50000 = job_counts[job_counts > 50000].index.tolist()\nresult = sorted(jobs_over_50000)",
+    "result": [
+      "admin.",
+      "blue-collar",
+      "management",
+      "services",
+      "technician"
+    ],
+    "expected": [
+      "admin.",
+      "blue-collar",
+      "management",
+      "services",
+      "technician"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:01.237529",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.1464760303497314
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which job categories have more than 50000 customers? Return as a sorted list.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_009",
+    "question": "Which month category has the lowest average balance? If tied, return alphabetically first.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "result = df.groupby('month')['balance'].mean().idxmin()",
+    "result": "jul",
+    "expected": "jul",
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:05.403841",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 3.3875529766082764
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which month category has the lowest average balance? If tied, return alphabetically first.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_010",
+    "question": "How much higher is the subscription rate for job='management' compared to job='services'? Return percentage points difference.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "management_rate = df[df['job'] == 'management']['y'].mean() * 100\nservices_rate = df[df['job'] == 'services']['y'].mean() * 100\nresult = management_rate - services_rate",
+    "result": 6.767795482284768,
+    "expected": 6.77,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:08.810313",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 3.5948939323425293
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: How much higher is the subscription rate for job='management' compared to job='services'? Return percentage points difference.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_011",
+    "question": "Which job categories are anomalies - having above-median age but below-median subscription rate? Return sorted list.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Calculate overall medians\nmedian_age = df['age'].median()\nmedian_subscription_rate = df['y'].mean()\n\n# Calculate age and subscription rate by job\njob_stats = df.groupby('job').agg({\n    'age': 'mean',\n    'y': 'mean'\n}).rename(columns={'age': 'avg_age', 'y': 'subscription_rate'})\n\n# Find anomalies: above-median age but below-median subscription rate\nanomalies = job_stats[(job_stats['avg_age'] > median_age) & \n                       (job_stats['subscription_rate'] < median_subscription_rate)]\n\n# Return sorted list of job categories\nresult = sorted(anomalies.index.tolist())",
+    "result": [
+      "admin.",
+      "blue-collar",
+      "entrepreneur",
+      "housemaid",
+      "technician"
+    ],
+    "expected": [
+      "blue-collar",
+      "entrepreneur",
+      "housemaid"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:12.424115",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 6.168447971343994
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which job categories are anomalies - having above-median age but below-median subscription rate? Return sorted list.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_012",
+    "question": "How much higher is the average age for month='may' compared to month='nov'?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "avg_age_may = df[df['month'] == 'may']['age'].mean()\navg_age_nov = df[df['month'] == 'nov']['age'].mean()\nresult = avg_age_may - avg_age_nov",
+    "result": -2.8126264550680276,
+    "expected": -2.81,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:18.611836",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.530448913574219
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: How much higher is the average age for month='may' compared to month='nov'?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_013",
+    "question": "Divide customers into 4 balance quartiles. What is the subscription percentage (0-100) in the lower-middle (25-50%) (Q2) quartile?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "df['balance_quartile'] = pd.qcut(df['balance'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\nq2_data = df[df['balance_quartile'] == 'Q2']\nresult = (q2_data['y'].sum() / len(q2_data)) * 100",
+    "result": 10.961567725681821,
+    "expected": 10.96,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:23.161208",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.170340061187744
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Divide customers into 4 balance quartiles. What is the subscription percentage (0-100) in the lower-middle (25-50%) (Q2) quartile?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_014",
+    "question": "How much higher is the subscription rate in the Q4 balance quartile compared to Q1? Return percentage points.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate balance quartiles\ndf['balance_quartile'] = pd.qcut(df['balance'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\n\n# Calculate subscription rate for Q1 and Q4\nq1_rate = df[df['balance_quartile'] == 'Q1']['y'].mean() * 100\nq4_rate = df[df['balance_quartile'] == 'Q4']['y'].mean() * 100\n\n# Calculate the difference in percentage points\nresult = q4_rate - q1_rate",
+    "result": 16.948811463133353,
+    "expected": 16.95,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:27.355311",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.348177909851074
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: How much higher is the subscription rate in the Q4 balance quartile compared to Q1? Return percentage points.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_015",
+    "question": "Score each job by opportunity: (count * (1 - subscription_rate) * avg_day). Return a DataFrame with top 5 segments showing [count, rate (percentage 0-100), avg_metric, opportunity_score], sorted by score descending.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Calculate metrics for each job\njob_stats = df.groupby('job').agg(\n    count=('id', 'size'),\n    subscription_rate=('y', 'mean'),\n    avg_day=('day', 'mean')\n).reset_index()\n\n# Calculate opportunity score\njob_stats['opportunity_score'] = job_stats['count'] * (1 - job_stats['subscription_rate']) * job_stats['avg_day']\n\n# Convert rate to percentage (0-100)\njob_stats['rate'] = job_stats['subscription_rate'] * 100\n\n# Rename columns and select required ones\njob_stats = job_stats.rename(columns={'avg_day': 'avg_metric'})\njob_stats = job_stats[['job', 'count', 'rate', 'avg_metric', 'opportunity_score']]\n\n# Sort by opportunity_score descending and get top 5\nresult = job_stats.sort_values('opportunity_score', ascending=False).head(5).set_index('job')",
+    "result": [
+      {
+        "count": 170498,
+        "rate": 6.743774120517543,
+        "avg_metric": 15.703973067132752,
+        "opportunity_score": 2496931.7176741078
+      },
+      {
+        "count": 175541,
+        "rate": 15.039221606348374,
+        "avg_metric": 16.36592021237204,
+        "opportunity_score": 2440829.7063933783
+      },
+      {
+        "count": 138107,
+        "rate": 11.832130159948445,
+        "avg_metric": 16.829110761945447,
+        "opportunity_score": 2049213.5010390496
+      },
+      {
+        "count": 81492,
+        "rate": 11.645314877533991,
+        "avg_metric": 15.911390075099396,
+        "opportunity_score": 1145651.9081873067
+      },
+      {
+        "count": 64209,
+        "rate": 8.271426124063606,
+        "avg_metric": 15.973648553941036,
+        "opportunity_score": 940815.9525300191
+      }
+    ],
+    "expected": [
+      {
+        "job": "blue-collar",
+        "count": 170498,
+        "rate": 6.74,
+        "avg_metric": 15.7,
+        "opportunity_score": 2496931.72
+      },
+      {
+        "job": "management",
+        "count": 175541,
+        "rate": 15.04,
+        "avg_metric": 16.37,
+        "opportunity_score": 2440829.71
+      },
+      {
+        "job": "technician",
+        "count": 138107,
+        "rate": 11.83,
+        "avg_metric": 16.83,
+        "opportunity_score": 2049213.5
+      },
+      {
+        "job": "admin.",
+        "count": 81492,
+        "rate": 11.65,
+        "avg_metric": 15.91,
+        "opportunity_score": 1145651.91
+      },
+      {
+        "job": "services",
+        "count": 64209,
+        "rate": 8.27,
+        "avg_metric": 15.97,
+        "opportunity_score": 940815.95
+      }
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:32.722537",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.791642665863037
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Score each job by opportunity: (count * (1 - subscription_rate) * avg_day). Return a DataFrame with top 5 segments showing [count, rate (percentage 0-100), avg_metric, opportunity_score], sorted by score descending.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_016",
+    "question": "Find the job with the highest subscription rate. Within that group, what is the lowest average age?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by job\nsubscription_rate = df.groupby('job')['y'].mean()\n\n# Find the job with highest subscription rate\nhighest_sub_job = subscription_rate.idxmax()\n\n# Filter for that job and calculate average age\nresult = df[df['job'] == highest_sub_job]['age'].mean()",
+    "result": 26.686411149825783,
+    "expected": 26.69,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:38.533221",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 6.970499038696289
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Find the job with the highest subscription rate. Within that group, what is the lowest average age?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_017",
+    "question": "Score each job by opportunity: (count * (1 - subscription_rate) * avg_balance). Return a DataFrame with top 5 segments showing [count, rate (percentage 0-100), avg_metric, opportunity_score], sorted by score descending.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Calculate metrics for each job\njob_stats = df.groupby('job').agg(\n    count=('id', 'count'),\n    subscription_rate=('y', 'mean'),\n    avg_balance=('balance', 'mean')\n).reset_index()\n\n# Calculate opportunity score\njob_stats['opportunity_score'] = job_stats['count'] * (1 - job_stats['subscription_rate']) * job_stats['avg_balance']\n\n# Convert rate to percentage (0-100)\njob_stats['rate'] = job_stats['subscription_rate'] * 100\n\n# Rename avg_balance to avg_metric\njob_stats['avg_metric'] = job_stats['avg_balance']\n\n# Select required columns and sort by opportunity_score descending\nresult = job_stats[['job', 'count', 'rate', 'avg_metric', 'opportunity_score']].sort_values('opportunity_score', ascending=False).head(5)\n\n# Set job as index or keep as column based on typical output format\nresult = result.reset_index(drop=True)",
+    "result": [
+      {
+        "job": "management",
+        "count": 175541,
+        "rate": 15.039221606348374,
+        "avg_metric": 1510.3852832101902,
+        "opportunity_score": 225260371.52325097
+      },
+      {
+        "job": "blue-collar",
+        "count": 170498,
+        "rate": 6.743774120517543,
+        "avg_metric": 977.4941817499325,
+        "opportunity_score": 155421574.89823928
+      },
+      {
+        "job": "technician",
+        "count": 138107,
+        "rate": 11.832130159948445,
+        "avg_metric": 1071.5715351140782,
+        "opportunity_score": 130480979.54470086
+      },
+      {
+        "job": "admin.",
+        "count": 81492,
+        "rate": 11.645314877533991,
+        "avg_metric": 1019.9245815540175,
+        "opportunity_score": 73436609.72105238
+      },
+      {
+        "job": "services",
+        "count": 64209,
+        "rate": 8.271426124063606,
+        "avg_metric": 834.6257066766341,
+        "opportunity_score": 49157784.871840395
+      }
+    ],
+    "expected": [
+      {
+        "job": "management",
+        "count": 175541,
+        "rate": 15.04,
+        "avg_metric": 1510.39,
+        "opportunity_score": 225260371.52
+      },
+      {
+        "job": "blue-collar",
+        "count": 170498,
+        "rate": 6.74,
+        "avg_metric": 977.49,
+        "opportunity_score": 155421574.9
+      },
+      {
+        "job": "technician",
+        "count": 138107,
+        "rate": 11.83,
+        "avg_metric": 1071.57,
+        "opportunity_score": 130480979.54
+      },
+      {
+        "job": "admin.",
+        "count": 81492,
+        "rate": 11.65,
+        "avg_metric": 1019.92,
+        "opportunity_score": 73436609.72
+      },
+      {
+        "job": "services",
+        "count": 64209,
+        "rate": 8.27,
+        "avg_metric": 834.63,
+        "opportunity_score": 49157784.87
+      }
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:45.523511",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 6.877679109573364
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Score each job by opportunity: (count * (1 - subscription_rate) * avg_balance). Return a DataFrame with top 5 segments showing [count, rate (percentage 0-100), avg_metric, opportunity_score], sorted by score descending.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_018",
+    "question": "Find the month with the lowest subscription rate. Within that group, what is the lowest average balance?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by month\nsubscription_rate_by_month = df.groupby('month')['y'].mean()\n\n# Find the month with the lowest subscription rate\nlowest_rate_month = subscription_rate_by_month.idxmin()\n\n# Filter data for that month\nlowest_rate_month_data = df[df['month'] == lowest_rate_month]\n\n# The question asks for \"the lowest average balance\" within that group\n# Since we're looking at one month, the average balance for that month is the answer\nresult = lowest_rate_month_data['balance'].mean()",
+    "result": 917.7608652823201,
+    "expected": 917.76,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:52.419954",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.373785734176636
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Find the month with the lowest subscription rate. Within that group, what is the lowest average balance?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_019",
+    "question": "Among customers in the top quartile of day, which month categories have below-average subscription rate? Return sorted list.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Calculate the top quartile threshold for 'day'\ntop_quartile_threshold = df['day'].quantile(0.75)\n\n# Filter customers in the top quartile of day\ntop_quartile_df = df[df['day'] >= top_quartile_threshold]\n\n# Calculate the overall average subscription rate in the top quartile\noverall_avg_rate = top_quartile_df['y'].mean()\n\n# Calculate subscription rate by month for top quartile customers\nsubscription_by_month = top_quartile_df.groupby('month')['y'].mean()\n\n# Find months with below-average subscription rate\nbelow_avg_months = subscription_by_month[subscription_by_month < overall_avg_rate].index.tolist()\n\n# Return sorted list\nresult = sorted(below_avg_months)",
+    "result": [
+      "aug",
+      "jan",
+      "jul",
+      "may",
+      "nov"
+    ],
+    "expected": [
+      "aug",
+      "jan",
+      "jul",
+      "may"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:48:57.820051",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.753454208374023
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Among customers in the top quartile of day, which month categories have below-average subscription rate? Return sorted list.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_020",
+    "question": "Find the month with highest average age. What is the subscription rate for that segment?",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Find the month with highest average age\nmonth_avg_age = df.groupby('month')['age'].mean()\nhighest_avg_age_month = month_avg_age.idxmax()\n\n# Calculate subscription rate for that month\nmonth_data = df[df['month'] == highest_avg_age_month]\nsubscription_rate = month_data['y'].mean()\n\nresult = subscription_rate",
+    "result": 0.49000434593654935,
+    "expected": 49.0,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:03.598475",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.916842937469482
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Find the month with highest average age. What is the subscription rate for that segment?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_021",
+    "question": "Show the subscription percentage breakdown by month. Return a DataFrame with columns [month, count, rate] where rate is percentage (0-100), sorted by rate descending.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Calculate subscription counts and rates by month\nmonth_stats = df.groupby('month').agg(\n    count=('y', 'sum'),\n    total=('y', 'count')\n).reset_index()\n\nmonth_stats['rate'] = (month_stats['count'] / month_stats['total']) * 100\n\n# Select required columns and sort by rate descending\nresult = month_stats[['month', 'count', 'rate']].sort_values('rate', ascending=False).reset_index(drop=True)",
+    "result": [
+      {
+        "month": "mar",
+        "count": 3315,
+        "rate": 57.135470527404344
+      },
+      {
+        "month": "sep",
+        "count": 3962,
+        "rate": 53.475502766905116
+      },
+      {
+        "month": "dec",
+        "count": 1062,
+        "rate": 51.3291445142581
+      },
+      {
+        "month": "oct",
+        "count": 4510,
+        "rate": 49.00043459365494
+      },
+      {
+        "month": "apr",
+        "count": 9737,
+        "rate": 23.56542994748179
+      },
+      {
+        "month": "feb",
+        "count": 7778,
+        "rate": 20.680120177607613
+      },
+      {
+        "month": "jan",
+        "count": 2351,
+        "rate": 12.41484923694355
+      },
+      {
+        "month": "aug",
+        "count": 14453,
+        "rate": 11.216135465896834
+      },
+      {
+        "month": "nov",
+        "count": 7254,
+        "rate": 10.98059398746632
+      },
+      {
+        "month": "jun",
+        "count": 9716,
+        "rate": 10.372584605530053
+      },
+      {
+        "month": "jul",
+        "count": 10052,
+        "rate": 9.084746988169584
+      },
+      {
+        "month": "may",
+        "count": 16298,
+        "rate": 7.1353831470463325
+      }
+    ],
+    "expected": [
+      {
+        "month": "mar",
+        "count": 5802,
+        "rate": 57.14
+      },
+      {
+        "month": "sep",
+        "count": 7409,
+        "rate": 53.48
+      },
+      {
+        "month": "dec",
+        "count": 2069,
+        "rate": 51.33
+      },
+      {
+        "month": "oct",
+        "count": 9204,
+        "rate": 49.0
+      },
+      {
+        "month": "apr",
+        "count": 41319,
+        "rate": 23.57
+      },
+      {
+        "month": "feb",
+        "count": 37611,
+        "rate": 20.68
+      },
+      {
+        "month": "jan",
+        "count": 18937,
+        "rate": 12.41
+      },
+      {
+        "month": "aug",
+        "count": 128859,
+        "rate": 11.22
+      },
+      {
+        "month": "nov",
+        "count": 66062,
+        "rate": 10.98
+      },
+      {
+        "month": "jun",
+        "count": 93670,
+        "rate": 10.37
+      },
+      {
+        "month": "jul",
+        "count": 110647,
+        "rate": 9.08
+      },
+      {
+        "month": "may",
+        "count": 228411,
+        "rate": 7.14
+      }
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:08.532760",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.488968133926392
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Show the subscription percentage breakdown by month. Return a DataFrame with columns [month, count, rate] where rate is percentage (0-100), sorted by rate descending.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_022",
+    "question": "Divide customers into 4 day quartiles. What is the subscription percentage (0-100) in the lowest (bottom 25%) (Q1) quartile?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "df['day_quartile'] = pd.qcut(df['day'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\nq1_data = df[df['day_quartile'] == 'Q1']\nresult = (q1_data['y'].sum() / len(q1_data)) * 100",
+    "result": 13.428062915105125,
+    "expected": 13.43,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:14.040689",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.545453071594238
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Divide customers into 4 day quartiles. What is the subscription percentage (0-100) in the lowest (bottom 25%) (Q1) quartile?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_023",
+    "question": "How much higher is the subscription rate for month='may' compared to month='jun'? Return percentage points difference.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "may_rate = df[df['month'] == 'may']['y'].mean() * 100\njun_rate = df[df['month'] == 'jun']['y'].mean() * 100\nresult = may_rate - jun_rate",
+    "result": -3.23720145848372,
+    "expected": -3.24,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:18.610952",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.186826944351196
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: How much higher is the subscription rate for month='may' compared to month='jun'? Return percentage points difference.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_024",
+    "question": "How much higher is the subscription rate in the Q4 day quartile compared to Q2? Return percentage points.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# First, create quartiles for the 'day' column\ndf['day_quartile'] = pd.qcut(df['day'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\n\n# Calculate subscription rate for each quartile\nsubscription_rates = df.groupby('day_quartile')['y'].mean()\n\n# Calculate the difference between Q4 and Q2 in percentage points\nq4_rate = subscription_rates['Q4']\nq2_rate = subscription_rates['Q2']\n\nresult = (q4_rate - q2_rate) * 100  # Convert to percentage points",
+    "result": -2.4838624598052332,
+    "expected": -2.48,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:22.817161",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.236768960952759
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: How much higher is the subscription rate in the Q4 day quartile compared to Q2? Return percentage points.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_025",
+    "question": "Divide customers into 4 day quartiles. What is the average age in the upper-middle (50-75%) (Q3) quartile?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "df['day_quartile'] = pd.qcut(df['day'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\nresult = df[df['day_quartile'] == 'Q3']['age'].mean()",
+    "result": 40.3303985520908,
+    "expected": 40.33,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:28.072819",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.730491876602173
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Divide customers into 4 day quartiles. What is the average age in the upper-middle (50-75%) (Q3) quartile?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_026",
+    "question": "Find the month with the highest subscription rate. Within that group, what is the lowest average day?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by month\nsubscription_rate = df.groupby('month')['y'].mean()\n\n# Find the month with highest subscription rate\nhighest_rate_month = subscription_rate.idxmax()\n\n# Filter for that month and calculate the average day\n# The question asks for \"lowest average day\" within that group\n# Since we're looking at a single month, the average day is just one value\nresult = df[df['month'] == highest_rate_month]['day'].mean()",
+    "result": 13.446914856945881,
+    "expected": 13.45,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:32.822119",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.585052728652954
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Find the month with the highest subscription rate. Within that group, what is the lowest average day?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_027",
+    "question": "Divide customers into 4 balance quartiles. What is the subscription percentage (0-100) in the highest (top 25%) (Q4) quartile?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "df['balance_quartile'] = pd.qcut(df['balance'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\nq4_data = df[df['balance_quartile'] == 'Q4']\nresult = (q4_data['y'].sum() / len(q4_data)) * 100",
+    "result": 20.476040437269365,
+    "expected": 20.48,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:38.426320",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.17209005355835
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Divide customers into 4 balance quartiles. What is the subscription percentage (0-100) in the highest (top 25%) (Q4) quartile?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_028",
+    "question": "Which job categories have below-average subscription rate but above-average customer count? These are opportunity segments. Return sorted list.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate overall average subscription rate and customer count per job\noverall_avg_subscription_rate = df['y'].mean()\njob_stats = df.groupby('job').agg(\n    subscription_rate=('y', 'mean'),\n    customer_count=('id', 'count')\n).reset_index()\n\n# Calculate average customer count across jobs\navg_customer_count = job_stats['customer_count'].mean()\n\n# Filter for jobs with below-average subscription rate but above-average customer count\nopportunity_segments = job_stats[\n    (job_stats['subscription_rate'] < overall_avg_subscription_rate) & \n    (job_stats['customer_count'] > avg_customer_count)\n]['job'].sort_values().tolist()\n\nresult = opportunity_segments",
+    "result": [
+      "admin.",
+      "blue-collar",
+      "services",
+      "technician"
+    ],
+    "expected": [
+      "admin.",
+      "blue-collar",
+      "services",
+      "technician"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:42.621936",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.904544115066528
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which job categories have below-average subscription rate but above-average customer count? These are opportunity segments. Return sorted list.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_029",
+    "question": "What percentage of month categories have subscription rates above the overall average?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate overall average subscription rate\noverall_avg = df['y'].mean()\n\n# Calculate subscription rate by month\nmonth_subscription_rates = df.groupby('month')['y'].mean()\n\n# Count how many months have subscription rates above overall average\nmonths_above_avg = (month_subscription_rates > overall_avg).sum()\n\n# Calculate percentage of month categories above average\ntotal_months = len(month_subscription_rates)\nresult = (months_above_avg / total_months) * 100",
+    "result": 58.333333333333336,
+    "expected": 58.33,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:48.544822",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.266596078872681
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: What percentage of month categories have subscription rates above the overall average?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_030",
+    "question": "Find the job with the highest subscription rate. Within that group, what is the lowest average day?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by job\nsubscription_rate = df.groupby('job')['y'].mean()\n\n# Find the job with highest subscription rate\nhighest_sub_job = subscription_rate.idxmax()\n\n# Filter for that job and calculate average day\nresult = df[df['job'] == highest_sub_job]['day'].mean()",
+    "result": 15.062547803178381,
+    "expected": 15.06,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:52.830615",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 6.175005912780762
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Find the job with the highest subscription rate. Within that group, what is the lowest average day?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_031",
+    "question": "Show the average balance breakdown by month. Include count and mean balance for each category, sorted by mean descending.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "result = df.groupby('month').agg(\n    count=('balance', 'count'),\n    mean_balance=('balance', 'mean')\n).sort_values('mean_balance', ascending=False)",
+    "result": [
+      {
+        "count": 5802,
+        "mean_balance": 2416.543950361944
+      },
+      {
+        "count": 2069,
+        "mean_balance": 2324.6689221846304
+      },
+      {
+        "count": 9204,
+        "mean_balance": 2319.5298783137764
+      },
+      {
+        "count": 7409,
+        "mean_balance": 2285.4840059387234
+      },
+      {
+        "count": 66062,
+        "mean_balance": 2239.3493082256064
+      },
+      {
+        "count": 41319,
+        "mean_balance": 1560.2638979646167
+      },
+      {
+        "count": 37611,
+        "mean_balance": 1332.0408657041824
+      },
+      {
+        "count": 93670,
+        "mean_balance": 1331.0084125120102
+      },
+      {
+        "count": 128859,
+        "mean_balance": 1140.6833127682196
+      },
+      {
+        "count": 18937,
+        "mean_balance": 1013.8238897396631
+      },
+      {
+        "count": 228411,
+        "mean_balance": 917.7608652823201
+      },
+      {
+        "count": 110647,
+        "mean_balance": 749.6430992254648
+      }
+    ],
+    "expected": [
+      {
+        "month": "mar",
+        "count": 5802,
+        "mean_balance": 2416.54
+      },
+      {
+        "month": "dec",
+        "count": 2069,
+        "mean_balance": 2324.67
+      },
+      {
+        "month": "oct",
+        "count": 9204,
+        "mean_balance": 2319.53
+      },
+      {
+        "month": "sep",
+        "count": 7409,
+        "mean_balance": 2285.48
+      },
+      {
+        "month": "nov",
+        "count": 66062,
+        "mean_balance": 2239.35
+      },
+      {
+        "month": "apr",
+        "count": 41319,
+        "mean_balance": 1560.26
+      },
+      {
+        "month": "feb",
+        "count": 37611,
+        "mean_balance": 1332.04
+      },
+      {
+        "month": "jun",
+        "count": 93670,
+        "mean_balance": 1331.01
+      },
+      {
+        "month": "aug",
+        "count": 128859,
+        "mean_balance": 1140.68
+      },
+      {
+        "month": "jan",
+        "count": 18937,
+        "mean_balance": 1013.82
+      },
+      {
+        "month": "may",
+        "count": 228411,
+        "mean_balance": 917.76
+      },
+      {
+        "month": "jul",
+        "count": 110647,
+        "mean_balance": 749.64
+      }
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:49:59.024675",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.095494031906128
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Show the average balance breakdown by month. Include count and mean balance for each category, sorted by mean descending.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_032",
+    "question": "How much higher is the subscription rate for job='management' compared to job='admin.'? Return percentage points difference.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "management_rate = df[df['job'] == 'management']['y'].mean() * 100\nadmin_rate = df[df['job'] == 'admin.']['y'].mean() * 100\nresult = management_rate - admin_rate",
+    "result": 3.3939067288143825,
+    "expected": 3.39,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:03.138967",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 3.763446092605591
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: How much higher is the subscription rate for job='management' compared to job='admin.'? Return percentage points difference.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_033",
+    "question": "What percentage of job='management' customers have day above the overall average day?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "overall_avg_day = df['day'].mean()\nmanagement_customers = df[df['job'] == 'management']\nabove_avg_count = (management_customers['day'] > overall_avg_day).sum()\nresult = (above_avg_count / len(management_customers)) * 100",
+    "result": 53.87972040719832,
+    "expected": 53.88,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:06.921381",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 3.8349499702453613
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: What percentage of job='management' customers have day above the overall average day?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_034",
+    "question": "Which month categories have below-average subscription rate but above-average customer count? These are opportunity segments. Return sorted list.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate overall average subscription rate and customer count per month\noverall_avg_subscription_rate = df['y'].mean()\noverall_avg_customer_count = len(df) / df['month'].nunique()\n\n# Calculate subscription rate and customer count by month\nmonth_stats = df.groupby('month').agg(\n    subscription_rate=('y', 'mean'),\n    customer_count=('id', 'count')\n).reset_index()\n\n# Filter months with below-average subscription rate but above-average customer count\nopportunity_segments = month_stats[\n    (month_stats['subscription_rate'] < overall_avg_subscription_rate) &\n    (month_stats['customer_count'] > overall_avg_customer_count)\n]['month'].sort_values().tolist()\n\nresult = opportunity_segments",
+    "result": [
+      "aug",
+      "jul",
+      "jun",
+      "may",
+      "nov"
+    ],
+    "expected": [
+      "aug",
+      "jul",
+      "jun",
+      "may",
+      "nov"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:10.779972",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.421353816986084
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which month categories have below-average subscription rate but above-average customer count? These are opportunity segments. Return sorted list.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_035",
+    "question": "Show the average age breakdown by job. Include count and mean age for each category, sorted by mean descending.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "result = df.groupby('job').agg(\n    count=('age', 'count'),\n    mean_age=('age', 'mean')\n).sort_values('mean_age', ascending=False)",
+    "result": [
+      {
+        "count": 35185,
+        "mean_age": 60.48716782719909
+      },
+      {
+        "count": 2917,
+        "mean_age": 48.32944806307851
+      },
+      {
+        "count": 15912,
+        "mean_age": 47.18489190548014
+      },
+      {
+        "count": 17718,
+        "mean_age": 42.557625014109945
+      },
+      {
+        "count": 17634,
+        "mean_age": 40.97017126006578
+      },
+      {
+        "count": 170498,
+        "mean_age": 40.450063930368685
+      },
+      {
+        "count": 19020,
+        "mean_age": 40.42350157728707
+      },
+      {
+        "count": 175541,
+        "mean_age": 40.19645552890778
+      },
+      {
+        "count": 81492,
+        "mean_age": 39.67802974525107
+      },
+      {
+        "count": 138107,
+        "mean_age": 39.311034198121746
+      },
+      {
+        "count": 64209,
+        "mean_age": 38.9360058558769
+      },
+      {
+        "count": 11767,
+        "mean_age": 26.686411149825783
+      }
+    ],
+    "expected": [
+      {
+        "job": "retired",
+        "count": 35185,
+        "mean_age": 60.49
+      },
+      {
+        "job": "unknown",
+        "count": 2917,
+        "mean_age": 48.33
+      },
+      {
+        "job": "housemaid",
+        "count": 15912,
+        "mean_age": 47.18
+      },
+      {
+        "job": "entrepreneur",
+        "count": 17718,
+        "mean_age": 42.56
+      },
+      {
+        "job": "unemployed",
+        "count": 17634,
+        "mean_age": 40.97
+      },
+      {
+        "job": "blue-collar",
+        "count": 170498,
+        "mean_age": 40.45
+      },
+      {
+        "job": "self-employed",
+        "count": 19020,
+        "mean_age": 40.42
+      },
+      {
+        "job": "management",
+        "count": 175541,
+        "mean_age": 40.2
+      },
+      {
+        "job": "admin.",
+        "count": 81492,
+        "mean_age": 39.68
+      },
+      {
+        "job": "technician",
+        "count": 138107,
+        "mean_age": 39.31
+      },
+      {
+        "job": "services",
+        "count": 64209,
+        "mean_age": 38.94
+      },
+      {
+        "job": "student",
+        "count": 11767,
+        "mean_age": 26.69
+      }
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:16.218869",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 3.30218505859375
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Show the average age breakdown by job. Include count and mean age for each category, sorted by mean descending.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_036",
+    "question": "Find the job with the lowest subscription rate. Within that group, what is the highest average day?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by job\nsubscription_rate = df.groupby('job')['y'].mean()\n\n# Find the job with the lowest subscription rate\nlowest_sub_job = subscription_rate.idxmin()\n\n# Filter for that job group\nlowest_sub_group = df[df['job'] == lowest_sub_job]\n\n# Find the highest average day within that group\n# Since we're looking at a single job, the \"highest average day\" would be the average day for that job\nresult = lowest_sub_group['day'].mean()",
+    "result": 15.703973067132752,
+    "expected": 15.7,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:19.538916",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.522339105606079
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Find the job with the lowest subscription rate. Within that group, what is the highest average day?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_037",
+    "question": "Which job categories would have the biggest impact if brought to average subscription rate? Return top 3 by potential gain (count * rate gap), sorted by impact.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Calculate overall average subscription rate\noverall_avg_rate = df['y'].mean()\n\n# Calculate subscription rate and count for each job category\njob_stats = df.groupby('job').agg(\n    count=('y', 'count'),\n    rate=('y', 'mean')\n).reset_index()\n\n# Calculate rate gap (how much below average each job is)\n# Only consider jobs below average for \"bringing up to average\"\njob_stats['rate_gap'] = overall_avg_rate - job_stats['rate']\n\n# Calculate potential gain (only for jobs below average)\njob_stats['potential_gain'] = job_stats['count'] * job_stats['rate_gap']\n\n# Filter to jobs below average (positive rate gap means below average)\nbelow_avg = job_stats[job_stats['rate_gap'] > 0]\n\n# Get top 3 by potential gain\nresult = below_avg.nlargest(3, 'potential_gain')[['job', 'potential_gain']].sort_values('potential_gain', ascending=False)",
+    "result": [
+      {
+        "job": "blue-collar",
+        "potential_gain": 9072.697365333333
+      },
+      {
+        "job": "services",
+        "potential_gain": 2435.858656
+      },
+      {
+        "job": "entrepreneur",
+        "potential_gain": 695.6885120000001
+      }
+    ],
+    "expected": [
+      "blue-collar",
+      "services",
+      "entrepreneur"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:25.086894",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 6.791884899139404
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which job categories would have the biggest impact if brought to average subscription rate? Return top 3 by potential gain (count * rate gap), sorted by impact.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_038",
+    "question": "Find the month with the highest subscription rate. Within that group, what is the lowest average balance?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by month\nsubscription_rate_by_month = df.groupby('month')['y'].mean()\n\n# Find the month with highest subscription rate\nhighest_rate_month = subscription_rate_by_month.idxmax()\n\n# Filter data for that month\nmonth_data = df[df['month'] == highest_rate_month]\n\n# The question asks for \"lowest average balance\" within that group\n# Since we're looking at a single month, the average balance is just one value\n# But if the question means lowest average balance across some grouping within that month,\n# let's calculate the average balance for that month\nresult = month_data['balance'].mean()",
+    "result": 2416.543950361944,
+    "expected": 2416.54,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:31.897676",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 6.308069944381714
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Find the month with the highest subscription rate. Within that group, what is the lowest average balance?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_039",
+    "question": "Show the subscription percentage breakdown by day quartiles. Return a DataFrame with columns [quartile, count, rate] where rate is percentage (0-100).",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Create day quartiles\ndf['day_quartile'] = pd.qcut(df['day'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\n\n# Calculate subscription percentage breakdown by day quartiles\nresult = df.groupby('day_quartile').agg(\n    count=('y', 'count'),\n    rate=('y', lambda x: (x.sum() / len(x)) * 100)\n).reset_index()\n\nresult.columns = ['quartile', 'count', 'rate']\n\n# Clean up - remove the temporary column\ndf.drop('day_quartile', axis=1, inplace=True)",
+    "result": [
+      {
+        "quartile": "Q1",
+        "count": 207327,
+        "rate": 13.428062915105125
+      },
+      {
+        "quartile": "Q2",
+        "count": 197668,
+        "rate": 14.038691138676974
+      },
+      {
+        "quartile": "Q3",
+        "count": 159126,
+        "rate": 8.433568367205863
+      },
+      {
+        "quartile": "Q4",
+        "count": 185879,
+        "rate": 11.55482867887174
+      }
+    ],
+    "expected": [
+      {
+        "quartile": "Q1",
+        "count": 207327,
+        "rate": 13.43
+      },
+      {
+        "quartile": "Q2",
+        "count": 197668,
+        "rate": 14.04
+      },
+      {
+        "quartile": "Q3",
+        "count": 159126,
+        "rate": 8.43
+      },
+      {
+        "quartile": "Q4",
+        "count": 185879,
+        "rate": 11.55
+      }
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:38.225192",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 5.413326025009155
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Show the subscription percentage breakdown by day quartiles. Return a DataFrame with columns [quartile, count, rate] where rate is percentage (0-100).",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_040",
+    "question": "Among customers in the top quartile of age, which month categories have below-average subscription rate? Return sorted list.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate the top quartile threshold for age\nage_top_quartile_threshold = df['age'].quantile(0.75)\n\n# Filter customers in the top quartile of age\ntop_quartile_df = df[df['age'] >= age_top_quartile_threshold]\n\n# Calculate the overall average subscription rate for top quartile customers\noverall_avg_rate = top_quartile_df['y'].mean()\n\n# Calculate subscription rate by month for top quartile customers\nmonth_subscription_rates = top_quartile_df.groupby('month')['y'].mean()\n\n# Find months with below-average subscription rate\nbelow_avg_months = month_subscription_rates[month_subscription_rates < overall_avg_rate].index.tolist()\n\n# Sort the list\nresult = sorted(below_avg_months)",
+    "result": [
+      "aug",
+      "jul",
+      "jun",
+      "may",
+      "nov"
+    ],
+    "expected": [
+      "aug",
+      "jul",
+      "jun",
+      "may",
+      "nov"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:43.657532",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 10.200232028961182
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Among customers in the top quartile of age, which month categories have below-average subscription rate? Return sorted list.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_041",
+    "question": "Find the job with the highest subscription rate. Within that group, what is the highest average age?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by job\nsubscription_rate = df.groupby('job')['y'].mean()\n\n# Find the job with highest subscription rate\ntop_job = subscription_rate.idxmax()\n\n# Filter for that job and get the highest average age\n# Since we're looking at one job group, the average age is just the mean age for that group\nresult = df[df['job'] == top_job]['age'].mean()",
+    "result": 26.686411149825783,
+    "expected": 26.69,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:53.881640",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.7612810134887695
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Find the job with the highest subscription rate. Within that group, what is the highest average age?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_042",
+    "question": "Divide customers into 4 age quartiles. What is the subscription percentage (0-100) in the upper-middle (50-75%) (Q3) quartile?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "df['age_quartile'] = pd.qcut(df['age'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\nq3_data = df[df['age_quartile'] == 'Q3']\nresult = (q3_data['y'].sum() / len(q3_data)) * 100",
+    "result": 9.103585876958013,
+    "expected": 9.1,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:50:58.661778",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 3.9910168647766113
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Divide customers into 4 age quartiles. What is the subscription percentage (0-100) in the upper-middle (50-75%) (Q3) quartile?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_043",
+    "question": "Divide customers into 4 balance quartiles. What is the average balance in the highest (top 25%) (Q4) quartile?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "df['balance_quartile'] = pd.qcut(df['balance'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\nresult = df[df['balance_quartile'] == 'Q4']['balance'].mean()",
+    "result": 3759.8649901470203,
+    "expected": 3759.86,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:51:02.676225",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.268741130828857
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Divide customers into 4 balance quartiles. What is the average balance in the highest (top 25%) (Q4) quartile?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_044",
+    "question": "Which month categories have subscription rates below 10%? Return as a sorted list.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by month\nsubscription_rates = df.groupby('month')['y'].mean() * 100\n\n# Filter months with subscription rates below 10%\nmonths_below_10 = subscription_rates[subscription_rates < 10].index.tolist()\n\n# Sort the list\nresult = sorted(months_below_10)",
+    "result": [
+      "jul",
+      "may"
+    ],
+    "expected": [
+      "jul",
+      "may"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:51:06.963947",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.167123079299927
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which month categories have subscription rates below 10%? Return as a sorted list.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_045",
+    "question": "Which month categories would have the biggest impact if brought to average subscription rate? Return top 3 by potential gain (count * rate gap), sorted by impact.",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Calculate overall average subscription rate\noverall_rate = df['y'].mean()\n\n# Calculate subscription rate and count by month\nmonth_stats = df.groupby('month').agg(\n    count=('y', 'size'),\n    rate=('y', 'mean')\n).reset_index()\n\n# Calculate rate gap (how much below average each month is)\nmonth_stats['rate_gap'] = overall_rate - month_stats['rate']\n\n# Calculate potential gain (only for months below average)\n# Potential gain = count * rate_gap (positive gap means below average)\nmonth_stats['potential_gain'] = month_stats['count'] * month_stats['rate_gap']\n\n# Filter for months below average (positive rate_gap) and get top 3 by potential gain\nresult = month_stats[month_stats['rate_gap'] > 0].nlargest(3, 'potential_gain')[['month', 'potential_gain']].sort_values('potential_gain', ascending=False)",
+    "result": [
+      {
+        "month": "may",
+        "potential_gain": 11259.939424000002
+      },
+      {
+        "month": "jul",
+        "potential_gain": 3297.6343146666673
+      },
+      {
+        "month": "jun",
+        "potential_gain": 1585.3479466666668
+      }
+    ],
+    "expected": [
+      "may",
+      "jul",
+      "jun"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:51:11.150036",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 6.557797908782959
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which month categories would have the biggest impact if brought to average subscription rate? Return top 3 by potential gain (count * rate gap), sorted by impact.",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_046",
+    "question": "Divide customers into 4 balance quartiles. What is the subscription percentage (0-100) in the upper-middle (50-75%) (Q3) quartile?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "df['balance_quartile'] = pd.qcut(df['balance'], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])\nq3_data = df[df['balance_quartile'] == 'Q3']\nresult = (q3_data['y'].sum() / len(q3_data)) * 100",
+    "result": 13.716309182247727,
+    "expected": 13.72,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:51:17.726814",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.814488649368286
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Divide customers into 4 balance quartiles. What is the subscription percentage (0-100) in the upper-middle (50-75%) (Q3) quartile?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_047",
+    "question": "What percentage of job categories have subscription rates above the overall average?",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate overall average subscription rate\noverall_avg = df['y'].mean()\n\n# Calculate subscription rate by job category\njob_subscription_rates = df.groupby('job')['y'].mean()\n\n# Count how many job categories have rates above average\nabove_avg_count = (job_subscription_rates > overall_avg).sum()\n\n# Calculate percentage\ntotal_job_categories = len(job_subscription_rates)\nresult = (above_avg_count / total_job_categories) * 100",
+    "result": 50.0,
+    "expected": 50.0,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:51:22.564945",
+    "metadata": {
+      "level": "L4",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.118432998657227
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: What percentage of job categories have subscription rates above the overall average?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_048",
+    "question": "Find the month with lowest average balance. What is the subscription rate for that segment?",
+    "exec_success": true,
+    "correct": false,
+    "generated_code": "# Find the month with lowest average balance\nmonth_avg_balance = df.groupby('month')['balance'].mean()\nlowest_balance_month = month_avg_balance.idxmin()\n\n# Calculate subscription rate for that month\nmonth_data = df[df['month'] == lowest_balance_month]\nsubscription_rate = month_data['y'].mean()\n\nresult = subscription_rate",
+    "result": 0.09084746988169584,
+    "expected": 9.08,
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:51:26.702283",
+    "metadata": {
+      "level": "L5",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 4.7683491706848145
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Find the month with lowest average balance. What is the subscription rate for that segment?",
+        "role": "user"
+      }
+    ]
+  },
+  {
+    "question_id": "bank_hard_049",
+    "question": "Which month categories have subscription rates above 10%? Return as a sorted list.",
+    "exec_success": true,
+    "correct": true,
+    "generated_code": "# Calculate subscription rate by month\nsubscription_rates = df.groupby('month')['y'].mean() * 100\n\n# Filter months with subscription rates above 10%\nmonths_above_10 = subscription_rates[subscription_rates > 10].index.tolist()\n\n# Sort the list\nresult = sorted(months_above_10)",
+    "result": [
+      "apr",
+      "aug",
+      "dec",
+      "feb",
+      "jan",
+      "jun",
+      "mar",
+      "nov",
+      "oct",
+      "sep"
+    ],
+    "expected": [
+      "apr",
+      "aug",
+      "dec",
+      "feb",
+      "jan",
+      "jun",
+      "mar",
+      "nov",
+      "oct",
+      "sep"
+    ],
+    "error": null,
+    "model_id": "anthropic/claude-opus-4.5",
+    "timestamp": "2025-12-14T13:51:31.492558",
+    "metadata": {
+      "level": "L3",
+      "template": "unknown",
+      "insight_type": "unknown",
+      "df_name": "bank"
+    },
+    "metrics": {
+      "execution_time": 3.965819835662842
+    },
+    "prompt": [
+      {
+        "content": "You are a Python data analyst expert.\nGiven a DataFrame and a question, write pandas code to answer it.\n\nRules:\n- The DataFrame is already loaded as `df`\n- Store your final answer in a variable called `result`\n- Only use pandas (pd) and numpy (np) - already imported\n- Write minimal, clean code\n- Do not print anything\n\nPut your code inside <code></code> tags.\n\nExample:\n<code>\nresult = df['column'].sum()\n</code>",
+        "role": "system"
+      },
+      {
+        "content": "DataFrame: `df` (bank)\nShape: 750000 rows \u00d7 18 columns\n\nColumns and types:\n  - id: int64\n  - age: int64\n  - job: object\n  - marital: object\n  - education: object\n  - default: object\n  - balance: int64\n  - housing: object\n  - loan: object\n  - contact: object\n  - day: int64\n  - month: object\n  - duration: int64\n  - campaign: int64\n  - pdays: int64\n  - previous: int64\n  - poutcome: object\n  - y: int64\n\nFirst 3 rows:\n|   id |   age | job         | marital   | education   | default   |   balance | housing   | loan   | contact   |   day | month   |   duration |   campaign |   pdays |   previous | poutcome   |   y |\n|-----:|------:|:------------|:----------|:------------|:----------|----------:|:----------|:-------|:----------|------:|:--------|-----------:|-----------:|--------:|-----------:|:-----------|----:|\n|    0 |    42 | technician  | married   | secondary   | no        |         7 | no        | no     | cellular  |    25 | aug     |        117 |          3 |      -1 |          0 | unknown    |   0 |\n|    1 |    38 | blue-collar | married   | secondary   | no        |       514 | no        | no     | unknown   |    18 | jun     |        185 |          1 |      -1 |          0 | unknown    |   0 |\n|    2 |    36 | blue-collar | married   | secondary   | no        |       602 | yes       | no     | unknown   |    14 | may     |        111 |          2 |      -1 |          0 | unknown    |   0 |\n\nQuestion: Which month categories have subscription rates above 10%? Return as a sorted list.",
+        "role": "user"
+      }
+    ]
+  }
+]
